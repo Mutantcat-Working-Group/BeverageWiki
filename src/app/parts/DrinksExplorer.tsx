@@ -6,11 +6,14 @@ import SearchBar from "@/components/SearchBar";
 import Header from "@/components/Header";
 import { useI18n, useTranslation } from "@/i18n/Provider";
 import { LocalizedString } from "@/lib/i18n";
+import GiscusComments from "@/components/GiscusComments";
 
 type DrinkListItem = {
   slug: string;
   title: LocalizedString;
   description?: Array<LocalizedString>;
+  aliases?: Array<LocalizedString>;
+  tags?: Array<LocalizedString>;
 };
 
 function pick(ls?: LocalizedString, locale: "zh" | "en" = "zh") {
@@ -28,12 +31,24 @@ export default function DrinksExplorer({ drinks }: { drinks: DrinkListItem[] }) 
     const q = query.trim().toLowerCase();
     if (!q) return drinks;
     return drinks.filter((d) => {
-  const zh = pick(d.title, "zh")?.toLowerCase() || "";
-  const en = pick(d.title, "en")?.toLowerCase() || "";
+      const zh = pick(d.title, "zh")?.toLowerCase() || "";
+      const en = pick(d.title, "en")?.toLowerCase() || "";
       const desc = (d.description || [])
         .map((x) => (pick(x, "zh") || pick(x, "en") || "").toLowerCase())
         .join(" ");
-      return zh.includes(q) || en.includes(q) || desc.includes(q);
+      const aliasText = (d.aliases || [])
+        .map((x) => (pick(x, "zh") || pick(x, "en") || "").toLowerCase())
+        .join(" ");
+      const tagText = (d.tags || [])
+        .map((x) => (pick(x, "zh") || pick(x, "en") || "").toLowerCase())
+        .join(" ");
+      return (
+        zh.includes(q) ||
+        en.includes(q) ||
+        desc.includes(q) ||
+        aliasText.includes(q) ||
+        tagText.includes(q)
+      );
     });
   }, [query, drinks]);
 
@@ -51,7 +66,7 @@ export default function DrinksExplorer({ drinks }: { drinks: DrinkListItem[] }) 
             filtered.map((d) => (
               <button
                 key={d.slug}
-                className="text-left"
+                className="text-left hover:cursor-text"
                 onClick={() => router.push(`/drink/${d.slug}`)}
               >
                 <DrinkCard
@@ -67,6 +82,11 @@ export default function DrinksExplorer({ drinks }: { drinks: DrinkListItem[] }) 
           )}
         </section>
       </main>
+
+      {/* Comments at the bottom of homepage */}
+      <div className="max-w-4xl mx-auto mt-10">
+        <GiscusComments />
+      </div>
     </div>
   );
 }

@@ -35,6 +35,8 @@ export type DrinkListItem = {
   slug: string;
   title: LocalizedString;
   description?: Array<LocalizedString>;
+  aliases?: Array<LocalizedString>;
+  tags?: Array<LocalizedString>;
 };
 
 function toSlug(fileName: string) {
@@ -52,6 +54,12 @@ function normalizeDescription(value: any): Array<LocalizedString> | undefined {
   return [ensureLocalizedString(value)];
 }
 
+function normalizeLocArray(value: any): Array<LocalizedString> | undefined {
+  if (!value) return undefined;
+  if (Array.isArray(value)) return value.map(ensureLocalizedString);
+  return [ensureLocalizedString(value)];
+}
+
 export async function listDrinks(): Promise<DrinkListItem[]> {
   const files = await fs.readdir(DRINKS_DIR);
   const items: DrinkListItem[] = [];
@@ -62,7 +70,9 @@ export async function listDrinks(): Promise<DrinkListItem[]> {
     if (!fm) continue;
     const title = ensureLocalizedString(fm.title ?? { zh: slug, en: slug });
     const description = normalizeDescription(fm.description);
-    items.push({ slug, title, description });
+    const aliases = normalizeLocArray(fm.aliases);
+    const tags = normalizeLocArray(fm.tags);
+    items.push({ slug, title, description, aliases, tags });
   }
   return items.sort((a, b) => a.slug.localeCompare(b.slug));
 }

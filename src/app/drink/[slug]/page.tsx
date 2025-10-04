@@ -5,6 +5,7 @@ import { remark } from "remark";
 import html from "remark-html";
 import Header from "@/components/Header";
 import DrinkDetail from "./Detail.client";
+import GiscusComments from "@/components/GiscusComments";
 
 export const revalidate = 60;
 
@@ -40,6 +41,7 @@ export default async function DrinkPage({ params }: Props) {
       <Header title={"BeverageWiki"} />
       <div className="max-w-3xl mx-auto">
         <DrinkDetail frontmatter={data.frontmatter as any} contentHtml={contentHtml} />
+        <GiscusComments />
       </div>
     </div>
   );

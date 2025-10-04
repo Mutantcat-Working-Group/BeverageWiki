@@ -8,7 +8,11 @@ export default function Header({ title }: { title: string }) {
 
   return (
     <header className="w-full max-w-4xl mx-auto flex items-center justify-between py-6">
-      <h1 className="text-2xl font-semibold">{title}</h1>
+      <Link href="/" className="cursor-pointer">
+        <h1 className="text-2xl font-semibold hover:opacity-90 transition" title={title}>
+          {title}
+        </h1>
+      </Link>
       <div className="flex items-center gap-4">
         <nav className="text-sm text-neutral-600 dark:text-neutral-300">
           <Link className="mr-4 hover:underline" href="/">
