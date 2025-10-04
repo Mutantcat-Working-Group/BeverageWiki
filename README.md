@@ -70,9 +70,8 @@ https://example.com/images/coca-cola-can.jpg
 - 🇨🇳 [中文说明](README.md)
 - 🇺🇸 [English README](README.en.md)
 
-#### 四、鸣谢
+### 四、鸣谢
 <div align="center"> 
     <a href="https://www.netlify.com/" target="_blank" rel="noopener"><img src="https://s2.loli.net/2025/10/04/GH6CsVRFiQxlbmW.png" style="height:50px;margin-left:0px"/></a> 
     <a href="https://sm.ms/" target="_blank" rel="noopener"><img src="https://s2.loli.net/2025/09/29/NTcoU7g2WLBrOfP.png" style="height:30px;margin-left:10px"/></a> 
 </div>
-
