@@ -24,5 +24,12 @@
   "updatedAt": "更新时间",
   "links": "相关链接",
   "expand": "展开更多",
-  "collapse": "收起"
+  "collapse": "收起",
+  "contribution": "贡献 Contribution",
+  "contributionDevTitle": "面向开发者",
+  "contributionDevIntro": "如果您是一名程序员或了解开发，可以前往我们的 GitHub 仓库提交贡献：",
+  "contributionDevLinkLabel": "访问 Github 仓库",
+  "contributionDevNote": "建议阅读仓库中的 README 与示例文件，按模板在",
+  "contributionNondevTitle": "面向非开发者",
+  "contributionNondevIntro": "如果你不懂开发，也欢迎通过下方的评论区直接留言，写下你想贡献的饮料信息（名称、描述、产地、图片链接等）。我们会逐一处理，并在评论中给予回复。"
 }

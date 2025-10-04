@@ -24,5 +24,12 @@
   "updatedAt": "Updated at",
   "links": "Related links",
   "expand": "Show more",
-  "collapse": "Show less"
+  "collapse": "Show less",
+  "contribution": "Contribution",
+  "contributionDevTitle": "For Developers",
+  "contributionDevIntro": "If you are a developer or familiar with coding, please contribute via our GitHub repository:",
+  "contributionDevLinkLabel": "Open GitHub repository",
+  "contributionDevNote": "We recommend reading the README and example, then add or update entries in",
+  "contributionNondevTitle": "For Non‑Developers",
+  "contributionNondevIntro": "If you are not familiar with development, feel free to leave a comment below with the drink information you wish to contribute (name, description, origin, image links, etc.). We will review them one by one and reply in the comments."
 }
