@@ -310,7 +310,6 @@ export default function DrinkDetail({
                   aria-label={typeof (pick(img?.caption, locale)) === 'string' ? (pick(img?.caption, locale) as string) : "Open image"}
                   className="absolute inset-0 z-10 focus:outline-none"
                   onClick={() => openLightbox(i)}
-                  onTouchEnd={() => openLightbox(i)}
                 >
                   <span className="sr-only">Open image</span>
                 </button>
