@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import Script from "next/script";
 import I18nClientProvider from "./I18nClientProvider";
 
 const geistSans = Geist({
@@ -21,20 +22,26 @@ export const metadata: Metadata = {
     default: "饮料百科 | BeverageWiki",
     template: "%s | BeverageWiki",
   },
-  description: "饮料百科，使用 Next.js + Markdown + i18n 的内容站点。",
+  description: "饮料百科，搜罗全世界的各种饮料信息，避免他们消失后再也找不到相关信息。",
   openGraph: {
     type: "website",
     siteName: "BeverageWiki",
     title: "BeverageWiki",
-    description: "饮料百科，使用 Next.js + Markdown + i18n 的内容站点。",
+    description: "饮料百科，搜罗全世界的各种饮料信息，避免他们消失后再也找不到相关信息。",
     url: "/",
     locale: "zh_CN",
     images: [{ url: "/icon.png", width: 512, height: 512, alt: "BeverageWiki" }],
   },
+  verification: {
+    google: "TAgCk3id1AjtGQq0TexVFcTeHis-iT9jFh4GfYMMn8I",
+    other: {
+      "msvalidate.01": "09EFDE13A2FAD0169413AF8FAFCC323A",
+    },
+  },
   twitter: {
     card: "summary_large_image",
     title: "BeverageWiki",
-    description: "饮料百科，使用 Next.js + Markdown + i18n 的内容站点。",
+    description: "饮料百科，搜罗全世界的各种饮料信息，避免他们消失后再也找不到相关信息。",
     images: ["/icon.png"],
   },
   alternates: {
@@ -54,6 +61,15 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        {/* Google AdSense */}
+        <Script
+          id="adsbygoogle-init"
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3718441900987965"
+          crossOrigin="anonymous"
+          strategy="afterInteractive"
+        />
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
