@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { useRouter } from "next/navigation";
+import Link from "next/link";
 import DrinkCard from "@/components/DrinkCard";
 import SearchBar from "@/components/SearchBar";
 import Header from "@/components/Header";
@@ -25,7 +25,6 @@ export default function DrinksExplorer({ drinks }: { drinks: DrinkListItem[] }) 
   const { t } = useTranslation();
   const { locale } = useI18n();
   const [query, setQuery] = React.useState("");
-  const router = useRouter();
 
   const filtered = React.useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -64,11 +63,7 @@ export default function DrinksExplorer({ drinks }: { drinks: DrinkListItem[] }) 
             <p className="text-sm text-neutral-500">{t("noResults")}</p>
           ) : (
             filtered.map((d) => (
-              <button
-                key={d.slug}
-                className="text-left hover:cursor-text"
-                onClick={() => router.push(`/drink/${d.slug}`)}
-              >
+              <Link key={d.slug} href={`/drink/${d.slug}`} className="block focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 rounded-lg">
                 <DrinkCard
                   title={pick(d.title, locale) || pick(d.title, locale === "zh" ? "en" : "zh") || d.slug}
                   description={
@@ -77,7 +72,7 @@ export default function DrinksExplorer({ drinks }: { drinks: DrinkListItem[] }) 
                       : undefined
                   }
                 />
-              </button>
+              </Link>
             ))
           )}
         </section>
