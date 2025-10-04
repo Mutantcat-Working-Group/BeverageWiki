@@ -14,15 +14,6 @@ export default function Header({ title }: { title: string }) {
         </h1>
       </Link>
       <div className="flex items-center gap-4">
-        <nav className="text-sm text-neutral-600 dark:text-neutral-300">
-          <Link className="mr-4 hover:underline" href="/">
-            {t("navHome")}
-          </Link>
-          <a className="hover:underline" href="#">
-            {t("navAbout")}
-          </a>
-        </nav>
-
         <div className="flex items-center gap-2">
           <label className="text-sm text-neutral-500">{t("language")}</label>
           <select
