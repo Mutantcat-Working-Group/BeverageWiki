@@ -3,7 +3,7 @@
 <h1>BeverageWiki</h1>
 </div>
 
-## 1. Project Overview
+### 1. Project Overview
 
 - 🍹 **[beverage.wiki](https://beverage.wiki/) is an open beverage encyclopedia** documenting the history, recipes, packaging, and culture of drinks from around the world.
 	- From sodas to juices, from energy drinks to regional specialties, we aim to build a community-driven knowledge base that preserves fading beverage memories. Every bottle tells a story.
@@ -16,7 +16,7 @@
 - 🛠 **Open source.** We welcome Forks, Stars, PRs, suggestions, and discussions.
 	- We believe in collaboration and in the value of preserving beverage culture. Your contribution may become the missing link in someone’s search for the flavor of their youth.
 
-## 2. How to Contribute
+### 2. How to Contribute
 
 ### 🧃 Contribute a Drink Entry (Pull Request Guide)
 
@@ -65,7 +65,7 @@ Place image files under `/public/images` and reference them via a relative path:
 
 > ⚠️ Make sure file names don’t conflict with existing images. A good naming pattern is brand + spec + action, for example: `Pepsi_Blue_Bottle_500ml_front.jpg`, `Sprite_Can_330ml_open.jpg`.
 
-## 3. Languages
+### 3. Languages
 
 - 🇨🇳 [Chinese README](README.md)
 - 🇺🇸 [English README](README.en.md)
