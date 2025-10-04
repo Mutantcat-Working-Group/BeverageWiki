@@ -1,5 +1,6 @@
 "use client";
 import React from "react";
+import { createPortal } from "react-dom";
 import Link from "next/link";
 import { useI18n, useTranslation } from "@/i18n/Provider";
 import { LocalizedString } from "@/lib/i18n";
@@ -18,6 +19,42 @@ export default function DrinkDetail({
 }) {
   const { t } = useTranslation();
   const { locale } = useI18n();
+
+  // Lightbox state for images
+  const [lightbox, setLightbox] = React.useState<{ open: boolean; index: number }>({ open: false, index: 0 });
+  const images: any[] = Array.isArray((frontmatter as any)?.images) ? (frontmatter as any).images : [];
+  const openLightbox = (idx: number) => setLightbox({ open: true, index: idx });
+  const closeLightbox = () => setLightbox((p) => ({ ...p, open: false }));
+  const nextImage = () => setLightbox((p) => ({ ...p, index: (p.index + 1) % Math.max(images.length, 1) }));
+  const prevImage = () => setLightbox((p) => ({ ...p, index: (p.index - 1 + Math.max(images.length, 1)) % Math.max(images.length, 1) }));
+
+  // Keyboard support & lock body scroll when lightbox is open
+  React.useEffect(() => {
+    if (!lightbox.open) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        e.preventDefault();
+        closeLightbox();
+      } else if (e.key === "ArrowRight") {
+        e.preventDefault();
+        nextImage();
+      } else if (e.key === "ArrowLeft") {
+        e.preventDefault();
+        prevImage();
+      }
+    };
+    const htmlEl = document.documentElement as HTMLElement;
+    const prevOverflowBody = document.body.style.overflow;
+    const prevOverflowHtml = htmlEl.style.overflow;
+    document.body.style.overflow = "hidden";
+    htmlEl.style.overflow = "hidden";
+    window.addEventListener("keydown", onKey);
+    return () => {
+      document.body.style.overflow = prevOverflowBody;
+      htmlEl.style.overflow = prevOverflowHtml;
+      window.removeEventListener("keydown", onKey);
+    };
+  }, [lightbox.open]);
 
   // Simple collapsible for long plain-text paragraphs on mobile
   const CollapsibleParagraph = ({ text }: { text: string }) => {
@@ -273,7 +310,16 @@ export default function DrinkDetail({
                   alt={(pick(img?.caption, locale) || "") as string}
                   loading="lazy"
                   decoding="async"
-                  className="w-full h-40 sm:h-48 object-cover transition-transform duration-300 group-hover:scale-[1.02]"
+                  className="w-full h-40 sm:h-48 object-cover transition-transform duration-300 group-hover:scale-[1.02] cursor-zoom-in"
+                  role="button"
+                  tabIndex={0}
+                  onClick={() => openLightbox(i)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      e.preventDefault();
+                      openLightbox(i);
+                    }
+                  }}
                 />
                 {(img?.caption?.zh || img?.caption?.en) && (
                   <figcaption className="text-xs p-2 text-neutral-600 dark:text-neutral-400">
@@ -285,6 +331,93 @@ export default function DrinkDetail({
           </div>
         </Section>
       ) : null}
+
+      {/* Lightbox Overlay */}
+      {lightbox.open && images.length > 0 ? (() => {
+        const current = images[lightbox.index] || {};
+        let touchStartX = 0;
+        let touchEndX = 0;
+        const onTouchStart = (e: React.TouchEvent) => {
+          touchStartX = e.touches[0]?.clientX || 0;
+        };
+        const onTouchEnd = () => {
+          const dx = touchEndX - touchStartX;
+          const threshold = 40;
+          if (dx > threshold) {
+            prevImage();
+          } else if (dx < -threshold) {
+            nextImage();
+          }
+        };
+        const onTouchMove = (e: React.TouchEvent) => {
+          touchEndX = e.touches[0]?.clientX || 0;
+        };
+        return createPortal((
+          <div
+            className="fixed inset-0 z-[9999] bg-black/80 backdrop-blur-sm flex items-center justify-center p-4"
+            role="dialog"
+            aria-modal="true"
+            onClick={closeLightbox}
+            onTouchStart={onTouchStart}
+            onTouchMove={onTouchMove}
+            onTouchEnd={onTouchEnd}
+          >
+            {/* Close button */}
+            <button
+              type="button"
+              aria-label="Close"
+              className="absolute top-4 right-4 text-white/90 hover:text-white bg-white/10 hover:bg-white/20 rounded-full p-2"
+              onClick={(e) => { e.stopPropagation(); closeLightbox(); }}
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
+                <path fillRule="evenodd" d="M6.225 4.811a1 1 0 0 1 1.414 0L12 9.172l4.361-4.361a1 1 0 1 1 1.414 1.414L13.414 10.586l4.361 4.361a1 1 0 0 1-1.414 1.414L12 12l-4.361 4.361a1 1 0 1 1-1.414-1.414l4.361-4.361-4.361-4.361a1 1 0 0 1 0-1.414Z" clipRule="evenodd" />
+              </svg>
+            </button>
+
+            {/* Prev */}
+            {images.length > 1 && (
+              <button
+                type="button"
+                aria-label="Previous"
+                className="absolute left-2 sm:left-4 text-white/90 hover:text-white bg-white/10 hover:bg-white/20 rounded-full p-2"
+                onClick={(e) => { e.stopPropagation(); prevImage(); }}
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-6 h-6">
+                  <path fillRule="evenodd" d="M12.707 15.707a1 1 0 0 1-1.414 0l-5-5a1 1 0 0 1 0-1.414l5-5a1 1 0 1 1 1.414 1.414L8.414 10l4.293 4.293a1 1 0 0 1 0 1.414Z" clipRule="evenodd" />
+                </svg>
+              </button>
+            )}
+
+            {/* Next */}
+            {images.length > 1 && (
+              <button
+                type="button"
+                aria-label="Next"
+                className="absolute right-2 sm:right-4 text-white/90 hover:text-white bg-white/10 hover:bg-white/20 rounded-full p-2"
+                onClick={(e) => { e.stopPropagation(); nextImage(); }}
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-6 h-6">
+                  <path fillRule="evenodd" d="M7.293 4.293a1 1 0 0 1 1.414 0l5 5a1 1 0 0 1 0 1.414l-5 5a1 1 0 1 1-1.414-1.414L11.586 10 7.293 5.707a1 1 0 0 1 0-1.414Z" clipRule="evenodd" />
+                </svg>
+              </button>
+            )}
+
+            {/* Image container (stop propagation to avoid closing) */}
+            <div className="max-w-[95vw] max-h-[85vh]" onClick={(e) => e.stopPropagation()}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={current.url}
+                alt={(pick(current?.caption, locale) || "") as string}
+                className="max-w-full max-h-[85vh] object-contain select-none"
+                draggable={false}
+              />
+              {(current?.caption?.zh || current?.caption?.en) && (
+                <div className="mt-2 text-center text-xs text-neutral-200">{pick(current.caption, locale) as any}</div>
+              )}
+            </div>
+          </div>
+        ), document.body);
+      })() : null}
 
       {renderList(frontmatter?.serving_suggestions, (x) => (typeof x === "string" ? x : (pick(x, locale) || pick(x, locale === "zh" ? "en" : "zh")))) && (
         <Section title={t("serving")}>
