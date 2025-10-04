@@ -1,0 +1,35 @@
+{
+  "siteTitle": "BeverageWiki",
+  "discover": "Discover drinks",
+  "searchPlaceholder": "Search drinks, e.g. cola, latte, green tea...",
+  "noResults": "No matches found.",
+  "navHome": "Home",
+  "navCategories": "Categories",
+  "navAbout": "About",
+  "language": "Language"
+  ,
+  "aliases": "Aliases",
+  "tags": "Tags",
+  "manufacturer": "Manufacturer",
+  "origin": "Origin",
+  "history": "History",
+  "legend": "Legend",
+  "ingredients": "Ingredients",
+  "nutrition": "Nutrition",
+  "images": "Images",
+  "serving": "Serving suggestions",
+  "culture": "Cultural notes",
+  "related": "Related drinks",
+  "contributor": "Contributor",
+  "updatedAt": "Updated at",
+  "links": "Related links",
+  "url": [
+    {
+      "title": {
+        "zh": "官网",
+        "en": "Official site"
+      },
+      "href": "https://www.coca-cola.com/"
+    }
+  ]
+}

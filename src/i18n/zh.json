@@ -1,0 +1,26 @@
+{
+  "siteTitle": "BeverageWiki",
+  "discover": "发现饮料",
+  "searchPlaceholder": "搜索饮料，例如：可乐、拿铁、绿茶...",
+  "noResults": "未找到匹配项。",
+  "navHome": "首页",
+  "navCategories": "分类",
+  "navAbout": "关于",
+  "language": "语言"
+  ,
+  "aliases": "别名",
+  "tags": "标签",
+  "manufacturer": "制造商",
+  "origin": "产地",
+  "history": "历史",
+  "legend": "传说",
+  "ingredients": "配料",
+  "nutrition": "营养",
+  "images": "图片",
+  "serving": "食用建议",
+  "culture": "文化",
+  "related": "相关饮料",
+  "contributor": "贡献者",
+  "updatedAt": "更新时间",
+  "links": "相关链接"
+}
