@@ -55,6 +55,13 @@ nutrition:
       item: Minerals
       value: Low (per applicable standards)
 
+images:
+  - url: https://s2.loli.net/2025/10/04/7ZxqJ9VYWFIvmLE.webp
+    type: 主图
+    caption:
+      zh: 怡宝瓶装图
+      en: C’estbon bottle picture
+
 serving_suggestions:
   - zh: 日常饮水与室内运动场景适用；剧烈运动或高温下配合电解质饮料补充。
     en: Suitable for daily hydration and indoor activities; add electrolytes for intense exercise or heat.

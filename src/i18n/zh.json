@@ -25,6 +25,8 @@
   "links": "相关链接",
   "expand": "展开更多",
   "collapse": "收起",
+  "showAll": "展开全部",
+  "showLess": "收起",
   "contribution": "贡献 Contribution",
   "contributionDevTitle": "面向开发者",
   "contributionDevIntro": "如果您是一名程序员或了解开发，可以前往我们的 GitHub 仓库提交贡献：",

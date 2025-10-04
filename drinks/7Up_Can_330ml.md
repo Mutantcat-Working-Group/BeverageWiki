@@ -71,6 +71,13 @@ nutrition:
       item: Caffeine
       value: None
 
+images:
+  - url: https://s2.loli.net/2025/10/04/9SmZGBJRtoux1jF.jpg
+    type: 主图
+    caption:
+      zh: 七喜罐装图
+      en: 7-Up canned picture
+
 serving_suggestions:
   - zh: 冰镇直饮；或用作高杯酒调配（如 7 and 7）。
     en: Serve well‑chilled; also used as a mixer (e.g., 7 and 7).

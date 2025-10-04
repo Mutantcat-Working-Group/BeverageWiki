@@ -25,6 +25,8 @@
   "links": "Related links",
   "expand": "Show more",
   "collapse": "Show less",
+  "showAll": "Show all",
+  "showLess": "Show less",
   "contribution": "Contribution",
   "contributionDevTitle": "For Developers",
   "contributionDevIntro": "If you are a developer or familiar with coding, please contribute via our GitHub repository:",

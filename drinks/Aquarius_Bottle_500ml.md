@@ -69,6 +69,15 @@ nutrition:
       item: Sodium/Potassium
       value: With electrolytes (varies)
 
+images:
+  - url: https://s2.loli.net/2025/10/04/6OrH7ZocYgnNFSt.webp
+    type: 主图
+    caption:
+      zh: 水动乐瓶装图
+      en: Aquarius bottle picture
+
+      
+
 serving_suggestions:
   - zh: 高温与运动时分次小口补充；冷藏口感更佳。
     en: Sip during heat and exercise; best served chilled.
