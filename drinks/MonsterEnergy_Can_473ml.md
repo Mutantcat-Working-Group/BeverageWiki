@@ -78,7 +78,7 @@ nutrition:
       value: ~210kcal (per 473ml, Original)
 
 images:
-  - url: https://s2.loli.net/2025/10/04/fBjbky3tWM2haU5.jpg
+  - url: https://s2.loli.net/2025/10/04/1yszKE9vZ4adLhJ.webp
     type: 主图
     caption:
       zh: 魔爪罐装图
