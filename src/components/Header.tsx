@@ -8,7 +8,7 @@ export default function Header({ title }: { title: string }) {
 
   return (
     <header className="w-full max-w-4xl mx-auto flex items-center justify-between py-6">
-      <Link href="/" className="cursor-pointer">
+      <Link href="https://beverage.wiki/" className="cursor-pointer" prefetch={false}>
         <h1 className="text-2xl font-semibold hover:opacity-90 transition" title={title}>
           {title}
         </h1>
