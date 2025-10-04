@@ -27,6 +27,31 @@ export function I18nProvider({ children }: { children: React.ReactNode }) {
     [locale]
   );
 
+  // Initialize locale on first client visit: use stored choice, otherwise detect from browser
+  React.useEffect(() => {
+    try {
+      const stored = typeof window !== "undefined" ? localStorage.getItem("i18n_locale") : null;
+      if (stored === "zh" || stored === "en") {
+        setLocale(stored);
+        return;
+      }
+      const lang = (typeof navigator !== "undefined" && (navigator.languages?.[0] || navigator.language)) || "";
+      const isZh = /^zh\b/i.test(lang);
+      setLocale(isZh ? "zh" : "en");
+    } catch {
+      // noop
+    }
+  }, []);
+
+  // Persist locale changes
+  React.useEffect(() => {
+    try {
+      if (typeof window !== "undefined") localStorage.setItem("i18n_locale", locale);
+    } catch {
+      // noop
+    }
+  }, [locale]);
+
   return (
     <I18nContext.Provider value={{ locale, setLocale, t }}>
       {children}
