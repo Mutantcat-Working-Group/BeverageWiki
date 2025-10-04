@@ -138,8 +138,8 @@ images:
   - url: /images/CocaCola_Can_330ml_pour.jpg
     type: 规格
     caption:
-      zh: 倒出来的听装可口可乐
-      en: Poured canned Coca-Cola
+      zh: 不同瓶装规格示意
+      en: Assorted bottle formats
 
 serving_suggestions:
   - zh: 冰镇后饮用，搭配汉堡最佳

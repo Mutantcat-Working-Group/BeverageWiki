@@ -37,9 +37,9 @@ export default async function DrinkPage({ params }: Props) {
   const contentHtml = processed.toString();
 
   return (
-    <div className="min-h-screen bg-background text-foreground p-6 sm:p-12">
+    <div className="min-h-screen bg-background text-foreground p-4 sm:p-12">
       <Header title={"BeverageWiki"} />
-      <div className="max-w-3xl mx-auto">
+      <div className="max-w-3xl mx-auto px-0 sm:px-2">
         <DrinkDetail frontmatter={data.frontmatter as any} contentHtml={contentHtml} />
         <GiscusComments />
       </div>

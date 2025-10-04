@@ -22,5 +22,7 @@
   "related": "相关饮料",
   "contributor": "贡献者",
   "updatedAt": "更新时间",
-  "links": "相关链接"
+  "links": "相关链接",
+  "expand": "展开更多",
+  "collapse": "收起"
 }

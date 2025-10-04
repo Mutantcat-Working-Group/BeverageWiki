@@ -19,6 +19,29 @@ export default function DrinkDetail({
   const { t } = useTranslation();
   const { locale } = useI18n();
 
+  // Simple collapsible for long plain-text paragraphs on mobile
+  const CollapsibleParagraph = ({ text }: { text: string }) => {
+    const [expanded, setExpanded] = React.useState(false);
+    const limit = 160; // character limit for mobile preview
+    const isLong = text && text.length > limit;
+    const display = expanded || !isLong ? text : text.slice(0, limit) + "…";
+    return (
+      <div>
+        <p className="text-neutral-700 dark:text-neutral-300 text-base leading-7">{display}</p>
+        {isLong ? (
+          <button
+            type="button"
+            className="mt-1 inline-block text-sm text-blue-600 hover:underline sm:hidden"
+            onClick={() => setExpanded((v) => !v)}
+            aria-expanded={expanded}
+          >
+            {expanded ? (t("collapse") || "收起") : (t("expand") || "展开更多")}
+          </button>
+        ) : null}
+      </div>
+    );
+  };
+
   const Section = ({ title, children }: { title: string; children: React.ReactNode }) => (
     <section className="rounded-xl border border-neutral-200/60 dark:border-neutral-800 bg-white/60 dark:bg-neutral-900/60 backdrop-blur p-4 sm:p-5 shadow-sm">
       <h2 className="text-lg sm:text-xl font-semibold mb-3">{title}</h2>
@@ -78,14 +101,14 @@ export default function DrinkDetail({
 
       {/* Localized Title */}
       <div className="space-y-3">
-        <h1 className="text-3xl font-bold tracking-tight">
+        <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">
           {pick(frontmatter?.title, locale) || pick(frontmatter?.title, locale === "zh" ? "en" : "zh")}
         </h1>
         {/* Tags & Aliases as chips */}
         <div className="flex flex-col gap-3">
           {Array.isArray(frontmatter?.tags) && frontmatter.tags.length > 0 ? (
             <div className="flex items-start gap-2">
-              <span className="text-xs uppercase tracking-wide text-neutral-500 mt-1">{t("tags")}</span>
+              <span className="text-xs uppercase tracking-wide text-neutral-500 mt-1 shrink-0 whitespace-nowrap">{t("tags")}</span>
               <ChipList
                 items={frontmatter.tags.map((x: any) => pick(x, locale) || pick(x, locale === "zh" ? "en" : "zh"))}
               />
@@ -93,7 +116,7 @@ export default function DrinkDetail({
           ) : null}
           {Array.isArray(frontmatter?.aliases) && frontmatter.aliases.length > 0 ? (
             <div className="flex items-start gap-2">
-              <span className="text-xs uppercase tracking-wide text-neutral-500 mt-1">{t("aliases")}</span>
+              <span className="text-xs uppercase tracking-wide text-neutral-500 mt-1 shrink-0 whitespace-nowrap">{t("aliases")}</span>
               <ChipList
                 items={frontmatter.aliases.map((x: any) => pick(x, locale) || pick(x, locale === "zh" ? "en" : "zh"))}
               />
@@ -109,11 +132,7 @@ export default function DrinkDetail({
                 ? d
                 : (pick(d, locale) || pick(d, locale === "zh" ? "en" : "zh"));
             if (!txt) return null;
-            return (
-              <p key={i} className="text-neutral-700 dark:text-neutral-300 text-base leading-7">
-                {txt}
-              </p>
-            );
+            return <CollapsibleParagraph key={i} text={txt} />;
           })}
         </div>
       )}
@@ -196,7 +215,25 @@ export default function DrinkDetail({
 
         return (
           <Section title={t("nutrition")}>
-            <div className="overflow-x-auto">
+            {/* Mobile: stacked list */}
+            <div className="sm:hidden space-y-2">
+              {items.map((it: any, i: number) => {
+                const { label, value, daily } = toKV(it);
+                if (!label && !value) return null;
+                return (
+                  <div key={i} className="rounded-lg border border-neutral-200/60 dark:border-neutral-800 p-3">
+                    <div className="flex items-start justify-between gap-3">
+                      <div className="font-medium text-neutral-900 dark:text-neutral-100 text-sm">{label || "-"}</div>
+                      <div className="text-sm text-neutral-700 dark:text-neutral-300">{value || "-"}</div>
+                    </div>
+                    <div className="text-xs text-neutral-500 mt-1">%DV: {daily || "-"}</div>
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* Desktop: table */}
+            <div className="hidden sm:block overflow-x-auto">
               <table className="min-w-full text-sm">
                 <thead>
                   <tr className="text-left text-neutral-600 dark:text-neutral-400 border-b border-neutral-200/60 dark:border-neutral-800">
@@ -227,14 +264,16 @@ export default function DrinkDetail({
       {/* Images */}
       {frontmatter?.images?.length ? (
         <Section title={t("images")}>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
             {frontmatter.images.map((img: any, i: number) => (
               <figure key={i} className="rounded-lg overflow-hidden border border-neutral-200/60 dark:border-neutral-800 group bg-neutral-50 dark:bg-neutral-900">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={img.url}
                   alt={(pick(img?.caption, locale) || "") as string}
-                  className="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-[1.02]"
+                  loading="lazy"
+                  decoding="async"
+                  className="w-full h-40 sm:h-48 object-cover transition-transform duration-300 group-hover:scale-[1.02]"
                 />
                 {(img?.caption?.zh || img?.caption?.en) && (
                   <figcaption className="text-xs p-2 text-neutral-600 dark:text-neutral-400">

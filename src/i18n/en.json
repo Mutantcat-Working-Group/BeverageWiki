@@ -22,5 +22,7 @@
   "related": "Related drinks",
   "contributor": "Contributor",
   "updatedAt": "Updated at",
-  "links": "Related links"
+  "links": "Related links",
+  "expand": "Show more",
+  "collapse": "Show less"
 }
