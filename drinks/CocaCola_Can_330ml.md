@@ -133,23 +133,8 @@ images:
   - url: https://imgservice.suning.cn/uimg1/b2c/image/zZ55MeTKzQceBriw7NRXmw.jpg
     type: 主图
     caption:
-      zh: 可乐经典灌装图
+      zh: 可乐经典罐装图
       en: Classic Coca-Cola bottle
-  - url: /images/CocaCola_Can_330ml_pour.jpg
-    type: 规格
-    caption:
-      zh: 倒出来的听装可口可乐
-      en: Poured canned Coca-Cola
-  - url: /images/CocaCola_Can_330ml_pour.jpg
-    type: 规格
-    caption:
-      zh: 倒出来的听装可口可乐
-      en: Poured canned Coca-Cola
-  - url: /images/CocaCola_Can_330ml_pour.jpg
-    type: 规格
-    caption:
-      zh: 倒出来的听装可口可乐
-      en: Poured canned Coca-Cola
   - url: /images/CocaCola_Can_330ml_pour.jpg
     type: 规格
     caption:

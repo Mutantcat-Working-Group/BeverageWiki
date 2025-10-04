@@ -303,7 +303,17 @@ export default function DrinkDetail({
         <Section title={t("images")}>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
             {frontmatter.images.map((img: any, i: number) => (
-              <figure key={i} className="rounded-lg overflow-hidden border border-neutral-200/60 dark:border-neutral-800 group bg-neutral-50 dark:bg-neutral-900">
+              <figure key={i} className="relative rounded-lg overflow-hidden border border-neutral-200/60 dark:border-neutral-800 group bg-neutral-50 dark:bg-neutral-900">
+                {/* Full-figure overlay button to ensure reliable tap on mobile */}
+                <button
+                  type="button"
+                  aria-label={typeof (pick(img?.caption, locale)) === 'string' ? (pick(img?.caption, locale) as string) : "Open image"}
+                  className="absolute inset-0 z-10 focus:outline-none"
+                  onClick={() => openLightbox(i)}
+                  onTouchEnd={() => openLightbox(i)}
+                >
+                  <span className="sr-only">Open image</span>
+                </button>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={img.url}
@@ -311,15 +321,6 @@ export default function DrinkDetail({
                   loading="lazy"
                   decoding="async"
                   className="w-full h-40 sm:h-48 object-cover transition-transform duration-300 group-hover:scale-[1.02] cursor-zoom-in"
-                  role="button"
-                  tabIndex={0}
-                  onClick={() => openLightbox(i)}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter" || e.key === " ") {
-                      e.preventDefault();
-                      openLightbox(i);
-                    }
-                  }}
                 />
                 {(img?.caption?.zh || img?.caption?.en) && (
                   <figcaption className="text-xs p-2 text-neutral-600 dark:text-neutral-400">
