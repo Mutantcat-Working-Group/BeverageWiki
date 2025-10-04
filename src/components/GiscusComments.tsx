@@ -13,6 +13,8 @@ export default function GiscusComments() {
   const theme = (process.env.NEXT_PUBLIC_GISCUS_THEME as any) || "preferred_color_scheme";
 
   if (!repo || !repoId || !category || !categoryId) {
+    // In production, silently hide the comments if not configured to avoid showing warnings on live site
+    if (process.env.NODE_ENV === "production") return null;
     return (
       <div className="mt-8 text-sm text-neutral-500">
         Giscus is not configured. Set NEXT_PUBLIC_GISCUS_REPO, NEXT_PUBLIC_GISCUS_REPO_ID, NEXT_PUBLIC_GISCUS_CATEGORY, NEXT_PUBLIC_GISCUS_CATEGORY_ID.
