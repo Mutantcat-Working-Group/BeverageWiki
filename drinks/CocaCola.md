@@ -87,7 +87,7 @@ related_drinks:
 url:
   - href: https://www.coca-cola.com/
     title:
-      zh: 官网
+      zh: 可口可乐官网
       en: Official site
 
 contributor: tyza66
