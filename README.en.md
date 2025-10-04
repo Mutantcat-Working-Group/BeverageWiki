@@ -9,8 +9,6 @@
 	- From sodas to juices, from energy drinks to regional specialties, we aim to build a community-driven knowledge base that preserves fading beverage memories. Every bottle tells a story.
 - 📖 **All content is written in Markdown and hosted on GitHub; anyone can contribute.**
 	- Share your favorite drinks, the soda from your childhood, or a rare/retired beverage. We welcome contributions from everyone—professional research and personal experiences alike.
-- 🌐 **beverage.wiki is built as a static site using edge computing technologies** for speed, security, and sustainability.
-	- We explore Cloudflare Pages, Vercel Edge Functions, and more to deploy efficiently, while preparing for ads to support long-term maintenance.
 - 🧃 **Why does this project exist?** Beverages are not just products—they carry culture, memory, and emotion.
 	- We hope beverage.wiki becomes a digital museum of drinks where people can browse, comment, share, and connect through taste memories and life stories.
 - 🛠 **Open source.** We welcome Forks, Stars, PRs, suggestions, and discussions.
