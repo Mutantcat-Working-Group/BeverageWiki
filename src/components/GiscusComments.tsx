@@ -20,10 +20,12 @@ export default function GiscusComments() {
     );
   }
 
+  const repoSlug = repo as `${string}/${string}`;
+
   return (
     <div className="mt-8">
       <Giscus
-        repo={repo}
+        repo={repoSlug}
         repoId={repoId}
         category={category}
         categoryId={categoryId}
@@ -34,7 +36,7 @@ export default function GiscusComments() {
         inputPosition="bottom"
         theme={theme as any}
         lang={locale === "zh" ? "zh-CN" : "en"}
-        crossorigin="anonymous"
+        loading="lazy"
       />
     </div>
   );
