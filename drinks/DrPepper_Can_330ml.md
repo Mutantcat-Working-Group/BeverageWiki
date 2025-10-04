@@ -95,8 +95,12 @@ nutrition:
       item: Protein
       value: 0g
 
-# 按照“图片必须可访问”原则，暂不附带图片；可后续补充自有拍摄或公共许可素材。
-# images: []
+images:
+  - url: https://s2.loli.net/2025/10/04/aMchD2QvF7HsPWZ.webp
+    type: 主图
+    caption:
+      zh: Dr Pepper罐装图
+      en: Dr Pepper canned picture
 
 serving_suggestions:
   - zh: 冰镇后直饮或加冰；适合与烧烤、汉堡等重口味食物搭配以形成风味对比。

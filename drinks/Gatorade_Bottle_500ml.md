@@ -93,6 +93,13 @@ nutrition:
       item: Potassium (per 240ml)
       value: ~30mg
 
+images:
+  - url: https://s2.loli.net/2025/10/04/SM8qNjknXucwhFt.jpg
+    type: 主图
+    caption:
+      zh: 佳得乐瓶装图
+      en: Gatorade bottle image
+
 serving_suggestions:
   - zh: 运动或高温环境下分次小口饮用，训练前中后均可根据需水量补给。
     en: Sip in portions under exercise or heat; hydrate before, during, and after workouts as needed.

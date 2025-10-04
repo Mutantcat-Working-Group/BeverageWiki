@@ -83,6 +83,13 @@ nutrition:
       item: pH (at source)
       value: ~7.6
 
+images:
+  - url: https://s2.loli.net/2025/10/04/xXsng4zQROuDZdy.webp
+    type: 主图
+    caption:
+      zh: S.Pellegrino瓶装图
+      en: S.Pellegrino bottle image
+
 serving_suggestions:
   - zh: 冰镇至约 8–12℃ 直饮，适合佐餐；避免与高甜饮品同饮以保持风味。
     en: Serve chilled around 8–12°C; pairs well with meals. Avoid mixing with very sweet drinks to preserve taste.

@@ -107,13 +107,12 @@ nutrition:
       item: Protein
       value: 0g
 
-# 为避免潜在的商标/包装版权与可访问性问题，暂不添加图片；后续可改用自有拍摄或确认许可的素材。
-# images:
-#   - url: /images/pepsi_can_330ml.jpg
-#     type: 主图
-#     caption:
-#       zh: 百事可乐听装330ml
-#       en: Pepsi 330ml can
+images:
+  - url: https://s2.loli.net/2025/10/04/UPnFGNct4vwjREp.jpg
+    type: 主图
+    caption:
+      zh: 百事可乐听装330ml
+      en: Pepsi 330ml can
 
 serving_suggestions:
   - zh: 建议冰镇至约2–4℃饮用，适合搭配炸鸡、披萨与各类快餐。

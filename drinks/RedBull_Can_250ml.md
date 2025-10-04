@@ -79,6 +79,13 @@ nutrition:
       item: Caffeine
       value: ~80mg (per 250ml)
 
+images:
+  - url: https://s2.loli.net/2025/10/04/X9kmRyoGi7epEq8.webp
+    type: 主图
+    caption:
+      zh: 红牛听装250ml
+      en: Red Bull 250ml can
+
 serving_suggestions:
   - zh: 冰镇直饮或配冰畅饮；运动或长时间驾驶不宜过量。
     en: Best served chilled or over ice; avoid excessive intake before sleep or for sensitive individuals.

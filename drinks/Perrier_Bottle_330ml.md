@@ -49,6 +49,13 @@ nutrition:
       item: TDS (ref.)
       value: ~456–480mg/L
 
+images:
+  - url: https://s2.loli.net/2025/10/04/kDla8Grhfm1dpct.jpg
+    type: 主图
+    caption:
+      zh: 巴黎水瓶装图
+      en: Perrier bottle packaging
+
 serving_suggestions:
   - zh: 冰镇直饮或用作调饮基底；亦可搭配柠檬片与薄荷。
     en: Serve well-chilled or use as a mixer; pairs with lemon and mint.

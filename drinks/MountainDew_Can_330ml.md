@@ -87,8 +87,12 @@ nutrition:
       item: Protein
       value: 0g
 
-# 遵循“图片需可访问/许可明确”规则，暂不附图。
-# images: []
+images:
+  - url: https://s2.loli.net/2025/10/04/H3XDiaym1xdfOv5.jpg
+    type: 主图
+    caption:
+      zh: 激浪罐装图
+      en: Mountain Dew canned image
 
 serving_suggestions:
   - zh: 建议充分冰镇或加冰，适合运动与户外场景；可与汉堡/炸物/披萨等重口味搭配。

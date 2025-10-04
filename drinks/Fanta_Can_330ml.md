@@ -105,13 +105,12 @@ nutrition:
       item: Protein
       value: 0g
 
-# 为避免潜在商标/包装版权与可访问性问题，暂不添加图片；后续可补充自有拍摄或确认许可素材。
-# images:
-#   - url: /images/fanta_orange_can_330ml.jpg
-#     type: 主图
-#     caption:
-#       zh: 芬达橙味听装330ml
-#       en: Fanta Orange 330ml can
+images:
+  - url: https://s2.loli.net/2025/10/04/Z7uCxWPSnQvDVGR.jpg
+    type: 主图
+    caption:
+      zh: 芬达罐装图
+      en: Fanta canned image
 
 serving_suggestions:
   - zh: 冰镇后直饮或加冰，搭配咸味零食、炸物与休闲小食更佳。

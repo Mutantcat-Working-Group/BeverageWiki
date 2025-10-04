@@ -87,6 +87,13 @@ nutrition:
       item: Na/K/Mg/Ca
       value: With electrolytes (formula varies by market)
 
+images:
+  - url: https://s2.loli.net/2025/10/04/ExU1c2DVvhdTkrO.jpg
+    type: 主图
+    caption:
+      zh: 宝矿力水特瓶装图
+      en: Pocari Sweat bottle image
+
 serving_suggestions:
   - zh: 高温或大量出汗时随时小口补充，运动前中后皆可；冷藏风味更佳。
     en: Sip during heat or heavy sweating; suitable before/during/after exercise; best served chilled.

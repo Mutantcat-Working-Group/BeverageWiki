@@ -59,6 +59,13 @@ nutrition:
       item: Minerals
       value: Low mineralization (Ca/Mg/K/Na vary by source and batch)
 
+images:
+  - url: https://s2.loli.net/2025/10/04/1FNKnsAMIbWuQgh.jpg
+    type: 主图
+    caption:
+      zh: 农夫山泉瓶装图
+      en:  Nongfu Spring bottle image
+
 serving_suggestions:
   - zh: 日常饮水适用；运动或高温环境下请结合电解质饮料补充。
     en: Suitable for daily hydration; add electrolyte drinks during exercise or heat exposure.

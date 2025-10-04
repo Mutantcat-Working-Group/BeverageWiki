@@ -99,13 +99,12 @@ nutrition:
       item: Protein
       value: 0g
 
-# 为避免潜在商标/包装版权与可访问性问题，暂不添加图片；后续可补充自有拍摄或确认许可素材。
-# images:
-#   - url: /images/sprite_can_330ml.jpg
-#     type: 主图
-#     caption:
-#       zh: 雪碧听装330ml
-#       en: Sprite 330ml can
+images:
+  - url: https://s2.loli.net/2025/10/04/XwifzEpLZkJs5le.jpg
+    type: 主图
+    caption:
+      zh: 雪碧听装330ml
+      en: Sprite 330ml can
 
 serving_suggestions:
   - zh: 冰镇至约 2–4℃；适合搭配炸鸡、烧烤与辛辣菜肴以平衡油腻与辛感。

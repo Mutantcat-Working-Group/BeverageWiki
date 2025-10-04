@@ -51,6 +51,13 @@ nutrition:
       item: Energy
       value: Variant-dependent (commonly 18–30kcal/100ml)
 
+images:
+  - url: https://s2.loli.net/2025/10/04/h3Y1mTzNg8vFyQL.jpg
+    type: 主图
+    caption:
+      zh: 立顿瓶装图
+      en: Lipton bottle image
+
 serving_suggestions:
   - zh: 冰镇饮用；摇匀后口感更佳。
     en: Best served chilled; shake gently before drinking.

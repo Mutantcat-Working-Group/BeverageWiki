@@ -65,6 +65,13 @@ nutrition:
       item: Sugar (per 250ml, sweetened)
       value: varies by market/flavor
 
+images:
+  - url: https://s2.loli.net/2025/10/04/ENOmVox3gnWDRya.webp
+    type: 主图
+    caption:
+      zh: 维他奶
+      en: Vitasoy Soy Milk
+
 serving_suggestions:
   - zh: 直接饮用或加热至温热（避免沸腾）；可搭配麦片、咖啡或烘焙使用。
     en: Drink chilled or gently warmed (avoid boiling); pairs with cereal, coffee, or baking use.

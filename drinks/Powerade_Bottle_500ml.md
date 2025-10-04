@@ -67,6 +67,13 @@ nutrition:
       item: Sodium/Potassium (electrolytes)
       value: Formula varies by market and package
 
+images:
+  - url: https://s2.loli.net/2025/10/04/aDWy8FnLrgkYzvd.jpg
+    type: 主图
+    caption:
+      zh: Powerade瓶装图
+      en: Powerade bottle image
+
 serving_suggestions:
   - zh: 运动前后或高温作业时按需补充，冷藏风味更佳；日常摄入请关注糖分与电解质摄入量。
     en: Consume before/after exercise or heat exposure; best served chilled; be mindful of sugar and electrolyte intake in daily use.

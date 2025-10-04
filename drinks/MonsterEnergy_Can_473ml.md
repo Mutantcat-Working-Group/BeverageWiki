@@ -77,6 +77,13 @@ nutrition:
       item: Calories
       value: ~210kcal (per 473ml, Original)
 
+images:
+  - url: https://s2.loli.net/2025/10/04/fBjbky3tWM2haU5.jpg
+    type: 主图
+    caption:
+      zh: 魔爪罐装图
+      en: Monster canned image
+
 serving_suggestions:
   - zh: 冰镇饮用；对咖啡因敏感者、孕妇与未成年人不建议饮用；避免与酒精同饮。
     en: Serve chilled; not recommended for caffeine-sensitive individuals, pregnant persons, or minors; avoid mixing with alcohol.

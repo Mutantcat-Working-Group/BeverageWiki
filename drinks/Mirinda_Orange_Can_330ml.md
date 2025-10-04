@@ -71,8 +71,12 @@ nutrition:
       item: Caffeine
       value: 0mg
 
-# 出于图片可访问/许可合规要求，暂不附图。
-# images: []
+images:
+  - url: https://s2.loli.net/2025/10/04/PutqB6KclAmbsaQ.jpg
+    type: 主图
+    caption:
+      zh: 美年达罐装图
+      en: Mirinda canned image
 
 serving_suggestions:
   - zh: 冰镇直饮或加冰；搭配咸香小食、炸物与派对小吃口感更佳。

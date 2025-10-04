@@ -57,6 +57,13 @@ nutrition:
       item: Ca/Mg/Na (ref.)
       value: Ca~80, Mg~26, Na~6.5 (mg/L)
 
+images:
+  - url: https://s2.loli.net/2025/10/04/XjfE6Dosp8wlOQx.webp
+    type: 主图
+    caption:
+      zh: 依云瓶装图
+      en: Evian bottle image
+
 serving_suggestions:
   - zh: 常温或冰镇皆宜；运动与日常补水通用。
     en: Enjoy at room temperature or chilled; suitable for daily hydration and sports.

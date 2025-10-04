@@ -65,6 +65,13 @@ nutrition:
       item: Energy (per bottle/100ml)
       value: Varies by formula/market
 
+images:
+  - url: https://s2.loli.net/2025/10/04/JrF9HKctSGOBviV.jpg
+    type: 主图
+    caption:
+      zh: 脉动瓶装图
+      en: Mizone bottle image
+
 serving_suggestions:
   - zh: 轻中度运动、学习通勤时按需饮用；冷藏更佳。
     en: Drink as needed during light/moderate activity or study/commute; best chilled.

@@ -67,8 +67,12 @@ nutrition:
       item: Caffeine
       value: 0mg
 
-# 暂不添加图片，待确认可访问/许可后补充
-# images: []
+images:
+  - url: https://s2.loli.net/2025/10/04/JTzvA1GuHZNSO6f.webp
+    type: 主图
+    caption:
+      zh: 星泉听装图
+      en: Starry 330ml can
 
 serving_suggestions:
   - zh: 冰镇或加冰；适合搭配炸鸡、三明治、披萨等快餐。
