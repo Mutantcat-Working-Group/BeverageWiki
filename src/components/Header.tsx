@@ -1,5 +1,6 @@
 "use client";
 import React from "react";
+import Link from "next/link";
 import { useI18n } from "../i18n/Provider";
 
 export default function Header({ title }: { title: string }) {
@@ -10,12 +11,9 @@ export default function Header({ title }: { title: string }) {
       <h1 className="text-2xl font-semibold">{title}</h1>
       <div className="flex items-center gap-4">
         <nav className="text-sm text-neutral-600 dark:text-neutral-300">
-          <a className="mr-4 hover:underline" href="#">
+          <Link className="mr-4 hover:underline" href="/">
             {t("navHome")}
-          </a>
-          <a className="mr-4 hover:underline" href="#">
-            {t("navCategories")}
-          </a>
+          </Link>
           <a className="hover:underline" href="#">
             {t("navAbout")}
           </a>

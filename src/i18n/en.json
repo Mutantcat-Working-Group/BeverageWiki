@@ -22,14 +22,5 @@
   "related": "Related drinks",
   "contributor": "Contributor",
   "updatedAt": "Updated at",
-  "links": "Related links",
-  "url": [
-    {
-      "title": {
-        "zh": "官网",
-        "en": "Official site"
-      },
-      "href": "https://www.coca-cola.com/"
-    }
-  ]
+  "links": "Related links"
 }
