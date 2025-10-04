@@ -85,7 +85,10 @@ related_drinks:
     en: Sprite
 
 url:
-  - https://www.coca-cola.com/
+  - href: https://www.coca-cola.com/
+    title:
+      zh: 官网
+      en: Official site
 
 contributor: tyza66
 updated_at: 2025-10-04

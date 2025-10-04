@@ -48,18 +48,34 @@ export default function DrinkDetail({
     );
   };
 
+  const descriptions: any[] = React.useMemo(() => {
+    const d = frontmatter?.description;
+    if (!d) return [];
+    return Array.isArray(d) ? d : [d];
+  }, [frontmatter]);
+
   return (
     <div className="space-y-8">
       {/* Localized Title */}
       <h1 className="text-3xl font-bold mb-2">
         {pick(frontmatter?.title, locale) || pick(frontmatter?.title, locale === "zh" ? "en" : "zh")}
       </h1>
-      {frontmatter?.description?.length ? (
-        <p className="text-neutral-700 dark:text-neutral-300">
-          {pick(frontmatter.description[0], locale) ||
-            pick(frontmatter.description[0], locale === "zh" ? "en" : "zh")}
-        </p>
-      ) : null}
+      {descriptions.length > 0 && (
+        <div className="space-y-3">
+          {descriptions.map((d, i) => {
+            const txt =
+              typeof d === "string"
+                ? d
+                : (pick(d, locale) || pick(d, locale === "zh" ? "en" : "zh"));
+            if (!txt) return null;
+            return (
+              <p key={i} className="text-neutral-700 dark:text-neutral-300">
+                {txt}
+              </p>
+            );
+          })}
+        </div>
+      )}
 
       {renderList(frontmatter?.aliases, (x) => pick(x, locale) || pick(x, locale === "zh" ? "en" : "zh")) && (
         <Section title={t("aliases")}>
@@ -103,26 +119,70 @@ export default function DrinkDetail({
         </Section>
       )}
 
-      {/* Nutrition: structure varies, print as key-value if available */}
-      {frontmatter?.nutrition?.length ? (
-        <Section title={t("nutrition")}>
-          <ul className="pl-0 space-y-2">
-            {frontmatter.nutrition.map((n: any, i: number) => {
-              // Try zh schema first then en
-              const zh = n?.zh;
-              const en = n?.en;
-              const label = zh?.项目 || en?.item;
-              const value = zh?.数值 || en?.value;
-              if (!label && !value) return null;
-              return (
-                <li key={i} className="text-sm">
-                  <span className="font-medium">{label}</span>: {value}
-                </li>
-              );
-            })}
-          </ul>
-        </Section>
-      ) : null}
+      {/* Nutrition: robust locale-aware handling for multiple shapes */}
+      {(() => {
+        const loc = locale;
+        const alt = loc === "zh" ? "en" : "zh";
+
+        // Accept either an array or an object with locale arrays
+        let items: any[] | undefined = undefined;
+        const n = frontmatter?.nutrition;
+        if (Array.isArray(n)) {
+          items = n;
+        } else if (n && (Array.isArray(n?.[loc]) || Array.isArray(n?.[alt]))) {
+          items = n?.[loc] || n?.[alt];
+        }
+        if (!items || items.length === 0) return null;
+
+        const getLabel = (o: any): string | undefined =>
+          o?.项目 || o?.名称 || o?.营养素 || o?.item || o?.name || o?.label;
+        const getValue = (o: any): string | undefined =>
+          o?.数值 || o?.含量 || o?.值 || o?.value || o?.amount;
+        const getUnit = (o: any): string | undefined => o?.单位 || o?.unit;
+        const getDaily = (o: any): string | undefined =>
+          o?.每日 || o?.每日摄入百分比 || o?.daily || o?.dv || o?.percent;
+
+        const toKV = (entry: any): { label?: string; value?: string; daily?: string } => {
+          if (!entry) return {};
+          // Case: string like "Label: Value"
+          if (typeof entry === "string") {
+            const parts = entry.split(":");
+            if (parts.length >= 2) {
+              const label = parts[0].trim();
+              const value = parts.slice(1).join(":").trim();
+              return { label, value };
+            }
+            return { value: entry };
+          }
+          // Case: object possibly has locale child or is the object itself
+          const o = entry?.[loc] || entry?.[alt] || entry;
+          const label = getLabel(o);
+          const unit = getUnit(o);
+          const daily = getDaily(o);
+          const v = getValue(o);
+          const value = [v, unit].filter(Boolean).join(" ");
+          return { label, value, daily };
+        };
+
+        return (
+          <Section title={t("nutrition")}>
+            <ul className="pl-0 space-y-2">
+              {items.map((it: any, i: number) => {
+                const { label, value, daily } = toKV(it);
+                if (!label && !value) return null;
+                return (
+                  <li key={i} className="text-sm">
+                    {label ? <span className="font-medium">{label}</span> : null}
+                    {label && value ? ": " : null}
+                    {value}
+                    {daily ? <span className="text-neutral-500"> {`(${daily})`}</span> : null}
+                  </li>
+                );
+              })}
+            </ul>
+          </Section>
+        );
+      })()}
 
       {/* Images */}
       {frontmatter?.images?.length ? (
