@@ -12,7 +12,7 @@ tags:
   - 汇源
 
 images:
-  - url: /images/100%橙汁_1.jpg
+  - url: /images/100pct_Orange_Juice_1.jpg
     caption: 100%橙汁
 
 url:
