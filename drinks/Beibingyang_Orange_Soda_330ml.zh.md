@@ -54,6 +54,11 @@ related_drinks:
   - 北冰洋酸梅汤
   - 北冰洋枇杷汽水
   - 义利北冰洋袋儿淋
+
+images:
+  - url: /images/Beibingyang_Orange_Soda_330ml_1.jpg
+    caption: 北冰洋橙汁汽水330ml
+
 url:
   - href: https://www.bbyfood.com/
     title: 北冰洋食品官方网站

@@ -52,6 +52,11 @@ related_drinks:
   - 元气森林白桃味苏打气泡水480ml
   - 元气森林柠檬味苏打气泡水
   - 元气森林乳酸菌味苏打气泡水
+
+images:
+  - url: /images/GenkiForest_Grape_Seltzer_480ml_1.jpg
+    caption: 元气森林葡萄味苏打气泡水480ml
+
 url:
   - href: https://www.genkiForest.cn/
     title: 元气森林官方网站

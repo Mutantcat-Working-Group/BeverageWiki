@@ -36,6 +36,11 @@ serving_suggestions:
   - 冷藏后饮用风味更佳，适合儿童日常补钙。
 cultural_notes:
   - AD钙奶的红色包装和小瓶造型已成为一代人的童年回忆。
+
+images:
+  - url: /images/Wahaha_AD_Calcium_Milk_Bottle_220ml_1.jpg
+    caption: 娃哈哈 AD钙奶瓶装220ml
+
 contributor: opencode
 updated_at: {}
 ---

@@ -49,6 +49,11 @@ related_drinks:
   - 椰树牌椰汁1L
   - 椰树牌矿泉水
   - 欢乐家椰汁
+
+images:
+  - url: /images/Coconut_Palm_245ml_1.jpg
+    caption: 椰树牌椰汁245ml
+
 url:
   - href: https://www.yeshu.com/
     title: 椰树集团官方网站

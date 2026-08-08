@@ -47,6 +47,11 @@ related_drinks:
   - 三得利乌龙茶
   - 康师傅绿茶
   - 农夫山泉茶π
+
+images:
+  - url: /images/Nongfu_Spring_Oriental_Leaf_500ml_1.jpg
+    caption: 农夫山泉东方树叶500ml
+
 url:
   - href: https://www.nongfuspring.com/
     title: 农夫山泉官方网站

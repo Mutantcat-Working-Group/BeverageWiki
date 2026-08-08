@@ -53,6 +53,11 @@ related_drinks:
   - 北冰洋橙汁汽水330ml
   - 大窑橙诺
   - 天府可乐330ml
+
+images:
+  - url: /images/Bingfeng_Orange_Soda_200ml_1.jpg
+    caption: 冰峰橙味汽水200ml
+
 url:
   - href: https://www.bingfeng.com/
     title: 冰峰官方网站

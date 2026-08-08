@@ -41,6 +41,11 @@ cultural_notes:
   - >-
     The Tsingtao Beer Festival is held annually in Qingdao, one of China's
     largest beer culture festivals.
+
+images:
+  - url: /images/Tsingtao_Beer_Bottle_500ml_1.jpg
+    caption: Tsingtao Beer Bottle 500ml
+
 contributor: opencode
 updated_at: {}
 ---

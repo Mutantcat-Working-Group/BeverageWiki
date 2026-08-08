@@ -50,6 +50,11 @@ related_drinks:
   - 康师傅冰红茶
   - 统一绿茶
   - 农夫山泉东方树叶绿茶
+
+images:
+  - url: /images/Master_Kong_Green_Tea_500ml_1.jpg
+    caption: 康师傅绿茶500ml
+
 url:
   - href: https://www.masterkong.com.cn/
     title: 康师傅官方网站

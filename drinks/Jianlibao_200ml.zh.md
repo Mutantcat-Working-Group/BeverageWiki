@@ -52,6 +52,11 @@ related_drinks:
   - 佳得乐
   - 宝矿力水特
   - 脉动
+
+images:
+  - url: /images/Jianlibao_200ml_1.jpg
+    caption: 健力宝200ml
+
 url:
   - href: https://www.jianlibao.com/
     title: 健力宝官方网站

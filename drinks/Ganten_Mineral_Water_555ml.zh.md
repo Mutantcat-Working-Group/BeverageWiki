@@ -45,6 +45,11 @@ related_drinks:
   - 农夫山泉天然水550ml
   - 昆仑山雪山矿泉水550ml
   - 依云天然矿泉水500ml
+
+images:
+  - url: /images/Ganten_Mineral_Water_555ml_1.jpg
+    caption: 百岁山天然矿泉水555ml
+
 url:
   - href: https://www.ganten.com.cn/
     title: 百岁山官方网站

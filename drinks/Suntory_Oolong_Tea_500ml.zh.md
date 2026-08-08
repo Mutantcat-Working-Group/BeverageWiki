@@ -50,6 +50,11 @@ related_drinks:
   - 伊藤园绿茶500ml
   - 康师傅无糖冰红茶500ml
   - 农夫山泉东方树叶乌龙茶500ml
+
+images:
+  - url: /images/Suntory_Oolong_Tea_500ml_1.jpg
+    caption: 三得利乌龙茶500ml
+
 url:
   - href: https://www.suntory.com.cn/
     title: 三得利中国官方网站

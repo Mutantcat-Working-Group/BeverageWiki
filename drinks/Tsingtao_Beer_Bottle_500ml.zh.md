@@ -31,6 +31,11 @@ serving_suggestions:
   - 冷藏后饮用最佳，搭配海鲜、烤肉等美食。
 cultural_notes:
   - 青岛啤酒节每年在青岛举办，是国内最大的啤酒文化节庆活动之一。
+
+images:
+  - url: /images/Tsingtao_Beer_Bottle_500ml_1.jpg
+    caption: 青岛啤酒玻璃瓶装500ml
+
 contributor: opencode
 updated_at: {}
 ---

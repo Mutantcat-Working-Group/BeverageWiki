@@ -44,6 +44,11 @@ cultural_notes:
   - >-
     The mini can design is easy for children to hold; the red can has become an
     iconic visual element of the Want Want brand.
+
+images:
+  - url: /images/Want_Want_Milk_Can_245ml_1.jpg
+    caption: Want Want Milk Can 245ml
+
 contributor: opencode
 updated_at: {}
 ---

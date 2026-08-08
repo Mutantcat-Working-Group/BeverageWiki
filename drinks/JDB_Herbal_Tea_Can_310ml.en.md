@@ -49,6 +49,11 @@ cultural_notes:
 related_drinks:
   - Wanglaoji Herbal Tea
   - Heqizheng Herbal Tea
+
+images:
+  - url: /images/JDB_Herbal_Tea_Can_310ml_1.jpg
+    caption: JDB Herbal Tea Can 310ml
+
 contributor: opencode
 updated_at: {}
 ---

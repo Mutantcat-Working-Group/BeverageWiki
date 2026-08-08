@@ -37,6 +37,11 @@ cultural_notes:
 related_drinks:
   - 王老吉凉茶
   - 和其正凉茶
+
+images:
+  - url: /images/JDB_Herbal_Tea_Can_310ml_1.jpg
+    caption: 加多宝凉茶罐装310ml
+
 contributor: opencode
 updated_at: {}
 ---

@@ -34,6 +34,11 @@ serving_suggestions:
   - 开罐即饮，冷热皆宜。
 cultural_notes:
   - 迷你铁罐包装便于儿童抓握，红色罐身已成为旺旺品牌的标志性视觉元素。
+
+images:
+  - url: /images/Want_Want_Milk_Can_245ml_1.jpg
+    caption: 旺仔牛奶铁罐装245ml
+
 contributor: opencode
 updated_at: {}
 ---

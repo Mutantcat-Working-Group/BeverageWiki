@@ -45,6 +45,11 @@ cultural_notes:
   - >-
     Its red packaging and small bottle shape have become nostalgic memories for
     generations.
+
+images:
+  - url: /images/Wahaha_AD_Calcium_Milk_Bottle_220ml_1.jpg
+    caption: Wahaha AD Calcium Milk Bottle 220ml
+
 contributor: opencode
 updated_at: {}
 ---
