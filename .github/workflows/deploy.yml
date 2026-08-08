@@ -37,6 +37,11 @@ jobs:
 
       - name: Build
         run: npm run build
+        env:
+          NEXT_PUBLIC_GISCUS_REPO: "Mutantcat-Working-Group/BeverageWiki"
+          NEXT_PUBLIC_GISCUS_REPO_ID: "R_kgDOP7oV1Q"
+          NEXT_PUBLIC_GISCUS_CATEGORY: "General"
+          NEXT_PUBLIC_GISCUS_CATEGORY_ID: "DIC_kwDOP7oV1c4CwOhS"
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
