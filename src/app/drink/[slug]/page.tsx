@@ -2,6 +2,7 @@ import { readDrink, listDrinks } from "@/lib/drinks";
 import { remark } from "remark";
 import html from "remark-html";
 import Header from "@/components/Header";
+import GiscusComments from "@/components/GiscusComments";
 import DrinkDetail from "./Detail.client";
 
 type Props = { params: Promise<{ slug: string }> };
@@ -42,6 +43,9 @@ export default async function DrinkPage({ params }: Props) {
           locales={renderedLocales}
           defaultLocale={data.defaultLocale}
         />
+        <div className="mt-10">
+          <GiscusComments />
+        </div>
       </div>
     </div>
   );

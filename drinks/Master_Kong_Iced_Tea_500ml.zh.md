@@ -7,6 +7,7 @@ description:
 aliases:
   - 康师傅冰红茶
   - 冰红茶
+  - 牢大
 tags:
   - 茶饮料
   - 红茶
