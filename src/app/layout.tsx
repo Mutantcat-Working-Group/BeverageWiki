@@ -95,15 +95,6 @@ export default function RootLayout({
             >
               Github
             </a>
-            <span> • </span>
-            <a
-              href="https://www.netlify.com/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-blue-600 hover:underline"
-            >
-              Netlify
-            </a>
           </div>
         </footer>
       </body>

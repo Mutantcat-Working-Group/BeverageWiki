@@ -7,8 +7,6 @@ import Header from "@/components/Header";
 import DrinkDetail from "./Detail.client";
 import GiscusComments from "@/components/GiscusComments";
 
-export const revalidate = 60;
-
 type Props = { params: Promise<{ slug: string }> };
 
 export async function generateStaticParams() {
