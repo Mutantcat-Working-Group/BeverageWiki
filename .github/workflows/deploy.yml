@@ -31,10 +31,9 @@ jobs:
           cache: npm
 
       - name: Install dependencies
-        run: npm install
-
-      - name: Install platform-specific native modules
-        run: npm install lightningcss-linux-x64-gnu@1.30.1 --no-save
+        run: |
+          rm -f package-lock.json
+          npm install
 
       - name: Build
         run: npm run build
