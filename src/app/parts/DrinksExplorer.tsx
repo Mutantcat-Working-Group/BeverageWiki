@@ -4,26 +4,25 @@ import Link from "next/link";
 import DrinkCard from "@/components/DrinkCard";
 import SearchBar from "@/components/SearchBar";
 import Header from "@/components/Header";
-import { useI18n, useTranslation } from "@/i18n/Provider";
-import { LocalizedString } from "@/lib/i18n";
+import { useTranslation } from "@/i18n/Provider";
 import GiscusComments from "@/components/GiscusComments";
 
 type DrinkListItem = {
   slug: string;
-  title: LocalizedString;
-  description?: Array<LocalizedString>;
-  aliases?: Array<LocalizedString>;
-  tags?: Array<LocalizedString>;
+  defaultTitle: string;
+  locales: string[];
+  tags?: string[];
 };
 
-function pick(ls?: LocalizedString, locale: "zh" | "en" = "zh") {
-  if (!ls) return undefined;
-  return (ls as any)[locale] || (ls as any)[locale === "zh" ? "en" : "zh"];
-}
+const LOCALE_LABELS: Record<string, string> = {
+  zh: "中文",
+  en: "EN",
+  ja: "日本語",
+  ko: "한국어",
+};
 
 export default function DrinksExplorer({ drinks }: { drinks: DrinkListItem[] }) {
   const { t } = useTranslation();
-  const { locale } = useI18n();
   const [query, setQuery] = React.useState("");
   const [expanded, setExpanded] = React.useState(false);
 
@@ -31,30 +30,14 @@ export default function DrinksExplorer({ drinks }: { drinks: DrinkListItem[] }) 
     const q = query.trim().toLowerCase();
     if (!q) return drinks;
     return drinks.filter((d) => {
-      const zh = pick(d.title, "zh")?.toLowerCase() || "";
-      const en = pick(d.title, "en")?.toLowerCase() || "";
-      const desc = (d.description || [])
-        .map((x) => (pick(x, "zh") || pick(x, "en") || "").toLowerCase())
-        .join(" ");
-      const aliasText = (d.aliases || [])
-        .map((x) => (pick(x, "zh") || pick(x, "en") || "").toLowerCase())
-        .join(" ");
-      const tagText = (d.tags || [])
-        .map((x) => (pick(x, "zh") || pick(x, "en") || "").toLowerCase())
-        .join(" ");
-      return (
-        zh.includes(q) ||
-        en.includes(q) ||
-        desc.includes(q) ||
-        aliasText.includes(q) ||
-        tagText.includes(q)
-      );
+      const title = d.defaultTitle.toLowerCase();
+      const tags = (d.tags || []).join(" ").toLowerCase();
+      return title.includes(q) || tags.includes(q);
     });
   }, [query, drinks]);
 
   const showAll = React.useMemo(() => {
-    // 搜索时直接显示全部；否则依据“展开全部”状态
-    return (query.trim().length > 0) || expanded;
+    return query.trim().length > 0 || expanded;
   }, [query, expanded]);
 
   const visible = React.useMemo(() => {
@@ -76,12 +59,9 @@ export default function DrinksExplorer({ drinks }: { drinks: DrinkListItem[] }) 
             {visible.map((d) => (
               <Link key={d.slug} href={`/drink/${d.slug}`} className="block focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 rounded-lg">
                 <DrinkCard
-                  title={pick(d.title, locale) || pick(d.title, locale === "zh" ? "en" : "zh") || d.slug}
-                  description={
-                    d.description && d.description.length > 0
-                      ? pick(d.description[0], locale) || pick(d.description[0], locale === "zh" ? "en" : "zh")
-                      : undefined
-                  }
+                  title={d.defaultTitle}
+                  tags={d.tags}
+                  locales={d.locales}
                 />
               </Link>
             ))}

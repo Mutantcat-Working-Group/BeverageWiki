@@ -4,99 +4,156 @@ import matter from "gray-matter";
 
 const DRINKS_DIR = path.join(process.cwd(), "drinks");
 
-export type Locale = "zh" | "en";
-
-export type LocalizedString = {
-  zh?: string;
-  en?: string;
-};
+export type Locale = string;
 
 export type DrinkFrontmatter = {
-  title?: LocalizedString | string;
-  description?: Array<LocalizedString> | LocalizedString | string;
-  aliases?: Array<LocalizedString>;
-  tags?: Array<LocalizedString>;
-  manufacturer?: Array<LocalizedString>;
-  origin?: Array<LocalizedString>;
-  history?: Array<LocalizedString | string>;
-  legend?: Array<LocalizedString>;
-  ingredients?: Array<LocalizedString>;
-  nutrition?: Array<any>;
-  images?: Array<any>;
-  serving_suggestions?: Array<LocalizedString | string>;
-  cultural_notes?: Array<LocalizedString | string>;
-  related_drinks?: Array<LocalizedString>;
-  url?: Array<string | { href: string; title?: LocalizedString | string }>;
+  title?: string;
+  description?: string[];
+  aliases?: string[];
+  tags?: string[];
+  manufacturer?: string[];
+  origin?: string[];
+  history?: string[];
+  legend?: string[];
+  ingredients?: string[];
+  nutrition?: Array<Record<string, string>>;
+  images?: Array<{ url: string; type?: string; caption?: string }>;
+  serving_suggestions?: string[];
+  cultural_notes?: string[];
+  related_drinks?: string[];
+  url?: Array<string | { href: string; title?: string }>;
   contributor?: string;
   updated_at?: string;
 };
 
 export type DrinkListItem = {
   slug: string;
-  title: LocalizedString;
-  description?: Array<LocalizedString>;
-  aliases?: Array<LocalizedString>;
-  tags?: Array<LocalizedString>;
+  defaultTitle: string;
+  locales: string[];
+  tags?: string[];
 };
 
-function toSlug(fileName: string) {
-  return fileName.replace(/\.md$/i, "");
+export type DrinkDetailData = {
+  slug: string;
+  locales: Record<string, { frontmatter: DrinkFrontmatter; content: string }>;
+  defaultLocale: string;
+};
+
+/** Extract slug and locale from filename like "CocaCola_Can_330ml.en.md" */
+function parseDrinkFileName(fileName: string): { slug: string; locale: string } | null {
+  if (!fileName.endsWith(".md")) return null;
+  const base = fileName.slice(0, -3); // remove .md
+  const lastDot = base.lastIndexOf(".");
+  if (lastDot === -1) {
+    // No locale suffix — treat as default "zh" for backward compatibility
+    return { slug: base, locale: "zh" };
+  }
+  const maybeLocale = base.slice(lastDot + 1);
+  // Locale codes: 2-letter (zh, en, ja, ko) or 5-char (zh-TW)
+  if (/^[a-z]{2}(-[A-Z]{2})?$/.test(maybeLocale)) {
+    return { slug: base.slice(0, lastDot), locale: maybeLocale };
+  }
+  // Not a locale — treat whole thing as slug with default locale
+  return { slug: base, locale: "zh" };
 }
 
-function ensureLocalizedString(value: any): LocalizedString {
-  if (typeof value === "string") return { zh: value, en: value };
-  return value ?? {};
+function readFrontmatterSync(filePath: string): DrinkFrontmatter | null {
+  // We'll use async version below
+  return null;
 }
 
-function normalizeDescription(value: any): Array<LocalizedString> | undefined {
-  if (!value) return undefined;
-  if (Array.isArray(value)) return value.map(ensureLocalizedString);
-  return [ensureLocalizedString(value)];
+async function readDrinkFile(
+  filePath: string
+): Promise<{ frontmatter: DrinkFrontmatter; content: string } | null> {
+  try {
+    const raw = await fs.readFile(filePath, "utf8");
+    const parsed = matter(raw);
+    return {
+      frontmatter: (parsed.data || {}) as DrinkFrontmatter,
+      content: (parsed.content || "").trim(),
+    };
+  } catch {
+    return null;
+  }
 }
 
-function normalizeLocArray(value: any): Array<LocalizedString> | undefined {
-  if (!value) return undefined;
-  if (Array.isArray(value)) return value.map(ensureLocalizedString);
-  return [ensureLocalizedString(value)];
+const LOCALE_PRIORITY: Record<string, string[]> = {
+  zh: ["zh", "en"],
+  en: ["en", "zh"],
+  ja: ["ja", "zh", "en"],
+  ko: ["ko", "zh", "en"],
+};
+
+/** Resolve the best locale to display */
+function resolveLocale(available: string[], preferred?: string): string {
+  if (preferred && available.includes(preferred)) return preferred;
+  // Try fallback chain
+  const chain = LOCALE_PRIORITY[preferred || ""] || ["en", "zh"];
+  for (const loc of chain) {
+    if (available.includes(loc)) return loc;
+  }
+  // First available
+  return available[0];
 }
 
 export async function listDrinks(): Promise<DrinkListItem[]> {
   const files = await fs.readdir(DRINKS_DIR);
-  const items: DrinkListItem[] = [];
+
+  // Group files by slug
+  const slugMap = new Map<string, { locales: Map<string, string> }>();
+
   for (const f of files) {
-    if (!f.endsWith(".md")) continue;
-    const slug = toSlug(f);
-    const fm = await readFrontmatter(slug);
-    if (!fm) continue;
-    const title = ensureLocalizedString(fm.title ?? { zh: slug, en: slug });
-    const description = normalizeDescription(fm.description);
-    const aliases = normalizeLocArray(fm.aliases);
-    const tags = normalizeLocArray(fm.tags);
-    items.push({ slug, title, description, aliases, tags });
+    const parsed = parseDrinkFileName(f);
+    if (!parsed) continue;
+    const { slug, locale } = parsed;
+    if (!slugMap.has(slug)) {
+      slugMap.set(slug, { locales: new Map() });
+    }
+    slugMap.get(slug)!.locales.set(locale, path.join(DRINKS_DIR, f));
   }
+
+  const items: DrinkListItem[] = [];
+
+  for (const [slug, { locales }] of slugMap) {
+    // Read the first available locale to get default title & tags
+    const firstLocale = locales.get("zh") || locales.get("en") || locales.values().next().value!;
+    const data = await readDrinkFile(firstLocale);
+    if (!data) continue;
+
+    const defaultTitle = data.frontmatter.title || slug;
+    items.push({
+      slug,
+      defaultTitle,
+      locales: Array.from(locales.keys()).sort(),
+      tags: data.frontmatter.tags,
+    });
+  }
+
   return items.sort((a, b) => a.slug.localeCompare(b.slug));
 }
 
-export async function readDrink(slug: string): Promise<{ frontmatter: DrinkFrontmatter; content: string } | null> {
-  const filePath = path.join(DRINKS_DIR, `${slug}.md`);
-  try {
-    const raw = await fs.readFile(filePath, "utf8");
-    const parsed = matter(raw);
-    const frontmatter = (parsed.data || {}) as DrinkFrontmatter;
-    const content = (parsed.content || "").trim();
-    return { frontmatter, content };
-  } catch (e) {
-    return null;
-  }
-}
+export async function readDrink(slug: string): Promise<DrinkDetailData | null> {
+  const files = await fs.readdir(DRINKS_DIR);
 
-async function readFrontmatter(slug: string): Promise<DrinkFrontmatter | null> {
-  const filePath = path.join(DRINKS_DIR, `${slug}.md`);
-  try {
-    const raw = await fs.readFile(filePath, "utf8");
-    const parsed = matter(raw);
-    return (parsed.data || {}) as DrinkFrontmatter;
-  } catch {
-    return null;
+  const localeFiles = new Map<string, string>();
+  for (const f of files) {
+    const parsed = parseDrinkFileName(f);
+    if (!parsed || parsed.slug !== slug) continue;
+    localeFiles.set(parsed.locale, path.join(DRINKS_DIR, f));
   }
+
+  if (localeFiles.size === 0) return null;
+
+  const locales: Record<string, { frontmatter: DrinkFrontmatter; content: string }> = {};
+
+  for (const [locale, filePath] of localeFiles) {
+    const data = await readDrinkFile(filePath);
+    if (data) {
+      locales[locale] = data;
+    }
+  }
+
+  const defaultLocale = locales["zh"] ? "zh" : locales["en"] ? "en" : Object.keys(locales)[0];
+
+  return { slug, locales, defaultLocale };
 }

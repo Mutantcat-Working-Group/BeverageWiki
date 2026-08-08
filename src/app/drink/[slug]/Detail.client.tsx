@@ -2,27 +2,59 @@
 import React from "react";
 import { createPortal } from "react-dom";
 import Link from "next/link";
-import { useI18n, useTranslation } from "@/i18n/Provider";
-import { LocalizedString } from "@/lib/i18n";
+import { useTranslation } from "@/i18n/Provider";
 
-function pick(ls?: LocalizedString, locale: "zh" | "en" = "zh") {
-  if (!ls) return undefined;
-  return (ls as any)[locale] || (ls as any)[locale === "zh" ? "en" : "zh"];
-}
+const LOCALE_LABELS: Record<string, string> = {
+  zh: "中文",
+  en: "English",
+  ja: "日本語",
+  ko: "한국어",
+};
+
+type Frontmatter = {
+  title?: string;
+  description?: string[];
+  aliases?: string[];
+  tags?: string[];
+  manufacturer?: string[];
+  origin?: string[];
+  history?: string[];
+  legend?: string[];
+  ingredients?: string[];
+  nutrition?: Array<Record<string, string>>;
+  images?: Array<{ url: string; type?: string; caption?: string }>;
+  serving_suggestions?: string[];
+  cultural_notes?: string[];
+  related_drinks?: string[];
+  url?: Array<string | { href: string; title?: string }>;
+  contributor?: string;
+  updated_at?: string;
+};
 
 export default function DrinkDetail({
-  frontmatter,
-  contentHtml,
+  locales,
+  defaultLocale,
 }: {
-  frontmatter: any;
-  contentHtml: string;
+  locales: Record<string, { frontmatter: Frontmatter; contentHtml: string }>;
+  defaultLocale: string;
 }) {
   const { t } = useTranslation();
-  const { locale } = useI18n();
+  const availableLocales = Object.keys(locales).sort();
+  const [currentLocale, setCurrentLocale] = React.useState(defaultLocale);
 
-  // Lightbox state for images
+  // Detect browser language on mount
+  React.useEffect(() => {
+    const browserLang = navigator.language.slice(0, 2).toLowerCase();
+    if (availableLocales.includes(browserLang) && browserLang !== defaultLocale) {
+      setCurrentLocale(browserLang);
+    }
+  }, []);
+
+  const { frontmatter, contentHtml } = locales[currentLocale] || locales[defaultLocale];
+
+  // Lightbox state
   const [lightbox, setLightbox] = React.useState<{ open: boolean; index: number }>({ open: false, index: 0 });
-  const images: any[] = Array.isArray((frontmatter as any)?.images) ? (frontmatter as any).images : [];
+  const images: Array<{ url: string; caption?: string }> = frontmatter?.images || [];
   const openLightbox = (idx: number) => setLightbox({ open: true, index: idx });
   const closeLightbox = () => setLightbox((p) => ({ ...p, open: false }));
   const nextImage = () => setLightbox((p) => ({ ...p, index: (p.index + 1) % Math.max(images.length, 1) }));
@@ -32,18 +64,11 @@ export default function DrinkDetail({
   React.useEffect(() => {
     if (!lightbox.open) return;
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") {
-        e.preventDefault();
-        closeLightbox();
-      } else if (e.key === "ArrowRight") {
-        e.preventDefault();
-        nextImage();
-      } else if (e.key === "ArrowLeft") {
-        e.preventDefault();
-        prevImage();
-      }
+      if (e.key === "Escape") { e.preventDefault(); closeLightbox(); }
+      else if (e.key === "ArrowRight") { e.preventDefault(); nextImage(); }
+      else if (e.key === "ArrowLeft") { e.preventDefault(); prevImage(); }
     };
-    const htmlEl = document.documentElement as HTMLElement;
+    const htmlEl = document.documentElement;
     const prevOverflowBody = document.body.style.overflow;
     const prevOverflowHtml = htmlEl.style.overflow;
     document.body.style.overflow = "hidden";
@@ -56,10 +81,9 @@ export default function DrinkDetail({
     };
   }, [lightbox.open]);
 
-  // Simple collapsible for long plain-text paragraphs on mobile
   const CollapsibleParagraph = ({ text }: { text: string }) => {
     const [expanded, setExpanded] = React.useState(false);
-    const limit = 160; // character limit for mobile preview
+    const limit = 160;
     const isLong = text && text.length > limit;
     const display = expanded || !isLong ? text : text.slice(0, limit) + "…";
     return (
@@ -86,8 +110,8 @@ export default function DrinkDetail({
     </section>
   );
 
-  const ChipList = ({ items }: { items: (string | undefined)[] }) => {
-    const chips = items.filter(Boolean) as string[];
+  const ChipList = ({ items }: { items: string[] }) => {
+    const chips = items.filter(Boolean);
     if (!chips.length) return null;
     return (
       <div className="flex flex-wrap gap-2">
@@ -104,18 +128,11 @@ export default function DrinkDetail({
     );
   };
 
-  const toDisplay = (v: any) => {
-    if (v instanceof Date) return v.toISOString().slice(0, 10);
-    if (v === undefined || v === null) return "";
-    return String(v);
-  };
-
-  const renderList = (arr?: any[], mapper?: (x: any) => string | undefined) => {
+  const renderList = (arr?: string[]) => {
     if (!arr || arr.length === 0) return null;
     return (
       <ul className="list-disc pl-6 space-y-1 marker:text-neutral-400">
-        {arr.map((x, i) => {
-          const text = mapper ? mapper(x) : String(x);
+        {arr.map((text, i) => {
           if (!text) return null;
           return (
             <li key={i} className="text-neutral-800 dark:text-neutral-200 text-sm leading-6">
@@ -127,135 +144,103 @@ export default function DrinkDetail({
     );
   };
 
-  const descriptions: any[] = React.useMemo(() => {
-    const d = frontmatter?.description;
-    if (!d) return [];
-    return Array.isArray(d) ? d : [d];
-  }, [frontmatter]);
-
   return (
     <div className="space-y-6 sm:space-y-8">
 
-      {/* Localized Title */}
+      {/* Language Switcher */}
+      {availableLocales.length > 1 && (
+        <div className="flex items-center gap-2 flex-wrap">
+          <span className="text-xs uppercase tracking-wide text-neutral-500">{t("language") || "语言"}:</span>
+          {availableLocales.map((loc) => (
+            <button
+              key={loc}
+              type="button"
+              onClick={() => setCurrentLocale(loc)}
+              className={`px-3 py-1 text-sm rounded-full border transition ${
+                currentLocale === loc
+                  ? "bg-blue-600 text-white border-blue-600"
+                  : "border-neutral-300 dark:border-neutral-600 text-neutral-600 dark:text-neutral-400 hover:bg-neutral-100 dark:hover:bg-neutral-800"
+              }`}
+            >
+              {LOCALE_LABELS[loc] || loc}
+            </button>
+          ))}
+        </div>
+      )}
+
+      {/* Title */}
       <div className="space-y-3">
         <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">
-          {pick(frontmatter?.title, locale) || pick(frontmatter?.title, locale === "zh" ? "en" : "zh")}
+          {frontmatter?.title || ""}
         </h1>
-        {/* Tags & Aliases as chips */}
         <div className="flex flex-col gap-3">
-          {Array.isArray(frontmatter?.tags) && frontmatter.tags.length > 0 ? (
+          {frontmatter?.tags && frontmatter.tags.length > 0 ? (
             <div className="flex items-start gap-2">
               <span className="text-xs uppercase tracking-wide text-neutral-500 mt-1 shrink-0 whitespace-nowrap">{t("tags")}</span>
-              <ChipList
-                items={frontmatter.tags.map((x: any) => pick(x, locale) || pick(x, locale === "zh" ? "en" : "zh"))}
-              />
+              <ChipList items={frontmatter.tags} />
             </div>
           ) : null}
-          {Array.isArray(frontmatter?.aliases) && frontmatter.aliases.length > 0 ? (
+          {frontmatter?.aliases && frontmatter.aliases.length > 0 ? (
             <div className="flex items-start gap-2">
               <span className="text-xs uppercase tracking-wide text-neutral-500 mt-1 shrink-0 whitespace-nowrap">{t("aliases")}</span>
-              <ChipList
-                items={frontmatter.aliases.map((x: any) => pick(x, locale) || pick(x, locale === "zh" ? "en" : "zh"))}
-              />
+              <ChipList items={frontmatter.aliases} />
             </div>
           ) : null}
         </div>
       </div>
-      {descriptions.length > 0 && (
+
+      {/* Description */}
+      {frontmatter?.description && frontmatter.description.length > 0 && (
         <div className="space-y-3">
-          {descriptions.map((d, i) => {
-            const txt =
-              typeof d === "string"
-                ? d
-                : (pick(d, locale) || pick(d, locale === "zh" ? "en" : "zh"));
-            if (!txt) return null;
-            return <CollapsibleParagraph key={i} text={txt} />;
+          {frontmatter.description.map((d, i) => {
+            if (!d) return null;
+            return <CollapsibleParagraph key={i} text={d} />;
           })}
         </div>
       )}
 
-      {/* Manufacturer & Origin */}
-      {renderList(frontmatter?.manufacturer, (x) => pick(x, locale) || pick(x, locale === "zh" ? "en" : "zh")) && (
-        <Section title={t("manufacturer")}>
-          {renderList(frontmatter.manufacturer, (x) => pick(x, locale) || pick(x, locale === "zh" ? "en" : "zh"))}
-        </Section>
+      {/* Manufacturer */}
+      {renderList(frontmatter?.manufacturer) && (
+        <Section title={t("manufacturer")}>{renderList(frontmatter.manufacturer)}</Section>
       )}
 
-      {renderList(frontmatter?.origin, (x) => pick(x, locale) || pick(x, locale === "zh" ? "en" : "zh")) && (
-        <Section title={t("origin")}>
-          {renderList(frontmatter.origin, (x) => pick(x, locale) || pick(x, locale === "zh" ? "en" : "zh"))}
-        </Section>
+      {/* Origin */}
+      {renderList(frontmatter?.origin) && (
+        <Section title={t("origin")}>{renderList(frontmatter.origin)}</Section>
       )}
 
-      {renderList(frontmatter?.history, (x) => (typeof x === "string" ? x : (pick(x, locale) || pick(x, locale === "zh" ? "en" : "zh")))) && (
-        <Section title={t("history")}>
-          {renderList(frontmatter.history, (x) => (typeof x === "string" ? x : (pick(x, locale) || pick(x, locale === "zh" ? "en" : "zh"))))}
-        </Section>
+      {/* History */}
+      {renderList(frontmatter?.history) && (
+        <Section title={t("history")}>{renderList(frontmatter.history)}</Section>
       )}
 
-      {renderList(frontmatter?.legend, (x) => pick(x, locale) || pick(x, locale === "zh" ? "en" : "zh")) && (
-        <Section title={t("legend")}>
-          {renderList(frontmatter.legend, (x) => pick(x, locale) || pick(x, locale === "zh" ? "en" : "zh"))}
-        </Section>
+      {/* Legend */}
+      {renderList(frontmatter?.legend) && (
+        <Section title={t("legend")}>{renderList(frontmatter.legend)}</Section>
       )}
 
-      {renderList(frontmatter?.ingredients, (x) => pick(x, locale) || pick(x, locale === "zh" ? "en" : "zh")) && (
-        <Section title={t("ingredients")}>
-          {renderList(frontmatter.ingredients, (x) => pick(x, locale) || pick(x, locale === "zh" ? "en" : "zh"))}
-        </Section>
+      {/* Ingredients */}
+      {renderList(frontmatter?.ingredients) && (
+        <Section title={t("ingredients")}>{renderList(frontmatter.ingredients)}</Section>
       )}
 
-      {/* Nutrition: robust locale-aware handling for multiple shapes */}
-      {(() => {
-        const loc = locale;
-        const alt = loc === "zh" ? "en" : "zh";
-
-        // Accept either an array or an object with locale arrays
-        let items: any[] | undefined = undefined;
-        const n = frontmatter?.nutrition;
-        if (Array.isArray(n)) {
-          items = n;
-        } else if (n && (Array.isArray(n?.[loc]) || Array.isArray(n?.[alt]))) {
-          items = n?.[loc] || n?.[alt];
-        }
-        if (!items || items.length === 0) return null;
-
-        const getLabel = (o: any): string | undefined =>
-          o?.项目 || o?.名称 || o?.营养素 || o?.item || o?.name || o?.label;
-        const getValue = (o: any): string | undefined =>
-          o?.数值 || o?.含量 || o?.值 || o?.value || o?.amount;
-        const getUnit = (o: any): string | undefined => o?.单位 || o?.unit;
-        const getDaily = (o: any): string | undefined =>
-          o?.每日 || o?.每日摄入百分比 || o?.daily || o?.dv || o?.percent;
-
-        const toKV = (entry: any): { label?: string; value?: string; daily?: string } => {
-          if (!entry) return {};
-          // Case: string like "Label: Value"
-          if (typeof entry === "string") {
-            const parts = entry.split(":");
-            if (parts.length >= 2) {
-              const label = parts[0].trim();
-              const value = parts.slice(1).join(":").trim();
-              return { label, value };
-            }
-            return { value: entry };
-          }
-          // Case: object possibly has locale child or is the object itself
-          const o = entry?.[loc] || entry?.[alt] || entry;
-          const label = getLabel(o);
-          const unit = getUnit(o);
-          const daily = getDaily(o);
-          const v = getValue(o);
-          const value = [v, unit].filter(Boolean).join(" ");
-          return { label, value, daily };
-        };
+      {/* Nutrition */}
+      {frontmatter?.nutrition && frontmatter.nutrition.length > 0 && (() => {
+        const items = frontmatter.nutrition;
+        const getLabel = (o: Record<string, string>) => o.item || o.项目 || o.name || o.label || "";
+        const getValue = (o: Record<string, string>) => o.value || o.数值 || o.amount || "";
+        const getUnit = (o: Record<string, string>) => o.unit || o.单位 || "";
+        const getDaily = (o: Record<string, string>) => o.daily || o.dv || o.percent || "";
 
         return (
           <Section title={t("nutrition")}>
             {/* Mobile: stacked list */}
             <div className="sm:hidden space-y-2">
-              {items.map((it: any, i: number) => {
-                const { label, value, daily } = toKV(it);
+              {items.map((it, i) => {
+                const label = getLabel(it);
+                const unit = getUnit(it);
+                const daily = getDaily(it);
+                const value = [getValue(it), unit].filter(Boolean).join(" ");
                 if (!label && !value) return null;
                 return (
                   <div key={i} className="rounded-lg border border-neutral-200/60 dark:border-neutral-800 p-3">
@@ -280,8 +265,11 @@ export default function DrinkDetail({
                   </tr>
                 </thead>
                 <tbody>
-                  {items.map((it: any, i: number) => {
-                    const { label, value, daily } = toKV(it);
+                  {items.map((it, i) => {
+                    const label = getLabel(it);
+                    const unit = getUnit(it);
+                    const daily = getDaily(it);
+                    const value = [getValue(it), unit].filter(Boolean).join(" ");
                     if (!label && !value) return null;
                     return (
                       <tr key={i} className="border-b border-neutral-100/60 dark:border-neutral-800/60">
@@ -299,15 +287,14 @@ export default function DrinkDetail({
       })()}
 
       {/* Images */}
-      {frontmatter?.images?.length ? (
+      {images.length > 0 && (
         <Section title={t("images")}>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
-            {frontmatter.images.map((img: any, i: number) => (
+            {images.map((img, i) => (
               <figure key={i} className="relative rounded-lg overflow-hidden border border-neutral-200/60 dark:border-neutral-800 group bg-neutral-50 dark:bg-neutral-900">
-                {/* Full-figure overlay button to ensure reliable tap on mobile */}
                 <button
                   type="button"
-                  aria-label={typeof (pick(img?.caption, locale)) === 'string' ? (pick(img?.caption, locale) as string) : "Open image"}
+                  aria-label={img.caption || "Open image"}
                   className="absolute inset-0 z-10 focus:outline-none"
                   onClick={() => openLightbox(i)}
                 >
@@ -316,53 +303,32 @@ export default function DrinkDetail({
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={img.url}
-                  alt={(pick(img?.caption, locale) || "") as string}
+                  alt={img.caption || ""}
                   loading="lazy"
                   decoding="async"
                   className="w-full h-40 sm:h-48 object-cover transition-transform duration-300 group-hover:scale-[1.02] cursor-zoom-in"
                 />
-                {(img?.caption?.zh || img?.caption?.en) && (
+                {img.caption && (
                   <figcaption className="text-xs p-2 text-neutral-600 dark:text-neutral-400">
-                    {pick(img.caption, locale) as any}
+                    {img.caption}
                   </figcaption>
                 )}
               </figure>
             ))}
           </div>
         </Section>
-      ) : null}
+      )}
 
-      {/* Lightbox Overlay */}
-      {lightbox.open && images.length > 0 ? (() => {
-        const current = images[lightbox.index] || {};
-        let touchStartX = 0;
-        let touchEndX = 0;
-        const onTouchStart = (e: React.TouchEvent) => {
-          touchStartX = e.touches[0]?.clientX || 0;
-        };
-        const onTouchEnd = () => {
-          const dx = touchEndX - touchStartX;
-          const threshold = 40;
-          if (dx > threshold) {
-            prevImage();
-          } else if (dx < -threshold) {
-            nextImage();
-          }
-        };
-        const onTouchMove = (e: React.TouchEvent) => {
-          touchEndX = e.touches[0]?.clientX || 0;
-        };
+      {/* Lightbox */}
+      {lightbox.open && images.length > 0 && (() => {
+        const current = images[lightbox.index] || {} as any;
         return createPortal((
           <div
             className="fixed inset-0 z-[9999] bg-black/80 backdrop-blur-sm flex items-center justify-center p-4"
             role="dialog"
             aria-modal="true"
             onClick={closeLightbox}
-            onTouchStart={onTouchStart}
-            onTouchMove={onTouchMove}
-            onTouchEnd={onTouchEnd}
           >
-            {/* Close button */}
             <button
               type="button"
               aria-label="Close"
@@ -373,8 +339,6 @@ export default function DrinkDetail({
                 <path fillRule="evenodd" d="M6.225 4.811a1 1 0 0 1 1.414 0L12 9.172l4.361-4.361a1 1 0 1 1 1.414 1.414L13.414 10.586l4.361 4.361a1 1 0 0 1-1.414 1.414L12 12l-4.361 4.361a1 1 0 1 1-1.414-1.414l4.361-4.361-4.361-4.361a1 1 0 0 1 0-1.414Z" clipRule="evenodd" />
               </svg>
             </button>
-
-            {/* Prev */}
             {images.length > 1 && (
               <button
                 type="button"
@@ -387,8 +351,6 @@ export default function DrinkDetail({
                 </svg>
               </button>
             )}
-
-            {/* Next */}
             {images.length > 1 && (
               <button
                 type="button"
@@ -401,53 +363,44 @@ export default function DrinkDetail({
                 </svg>
               </button>
             )}
-
-            {/* Image container (stop propagation to avoid closing) */}
             <div className="max-w-[95vw] max-h-[85vh]" onClick={(e) => e.stopPropagation()}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={current.url}
-                alt={(pick(current?.caption, locale) || "") as string}
+                alt={current.caption || ""}
                 className="max-w-full max-h-[85vh] object-contain select-none"
                 draggable={false}
               />
-              {(current?.caption?.zh || current?.caption?.en) && (
-                <div className="mt-2 text-center text-xs text-neutral-200">{pick(current.caption, locale) as any}</div>
+              {current.caption && (
+                <div className="mt-2 text-center text-xs text-neutral-200">{current.caption}</div>
               )}
             </div>
           </div>
         ), document.body);
-      })() : null}
+      })()}
 
-      {renderList(frontmatter?.serving_suggestions, (x) => (typeof x === "string" ? x : (pick(x, locale) || pick(x, locale === "zh" ? "en" : "zh")))) && (
-        <Section title={t("serving")}>
-          {renderList(frontmatter.serving_suggestions, (x) => (typeof x === "string" ? x : (pick(x, locale) || pick(x, locale === "zh" ? "en" : "zh"))))}
-        </Section>
+      {/* Serving suggestions */}
+      {renderList(frontmatter?.serving_suggestions) && (
+        <Section title={t("serving")}>{renderList(frontmatter.serving_suggestions)}</Section>
       )}
 
-      {renderList(frontmatter?.cultural_notes, (x) => (typeof x === "string" ? x : (pick(x, locale) || pick(x, locale === "zh" ? "en" : "zh")))) && (
-        <Section title={t("culture")}>
-          {renderList(frontmatter.cultural_notes, (x) => (typeof x === "string" ? x : (pick(x, locale) || pick(x, locale === "zh" ? "en" : "zh"))))}
-        </Section>
+      {/* Cultural notes */}
+      {renderList(frontmatter?.cultural_notes) && (
+        <Section title={t("culture")}>{renderList(frontmatter.cultural_notes)}</Section>
       )}
 
-      {renderList(frontmatter?.related_drinks, (x) => pick(x, locale) || pick(x, locale === "zh" ? "en" : "zh")) && (
-        <Section title={t("related")}>
-          {renderList(frontmatter.related_drinks, (x) => pick(x, locale) || pick(x, locale === "zh" ? "en" : "zh"))}
-        </Section>
+      {/* Related drinks */}
+      {renderList(frontmatter?.related_drinks) && (
+        <Section title={t("related")}>{renderList(frontmatter.related_drinks)}</Section>
       )}
 
-      {Array.isArray(frontmatter?.url) && frontmatter.url.length > 0 && (
+      {/* External links */}
+      {frontmatter?.url && frontmatter.url.length > 0 && (
         <Section title={t("links")}>
           <ul className="pl-0 space-y-2">
-            {frontmatter.url.map((u: any, i: number) => {
+            {frontmatter.url.map((u, i) => {
               const href = typeof u === "string" ? u : u?.href;
-              const title =
-                typeof u === "string"
-                  ? undefined
-                  : (typeof u?.title === "string"
-                      ? u.title
-                      : (pick(u?.title, locale) || pick(u?.title, locale === "zh" ? "en" : "zh")));
+              const linkTitle = typeof u === "string" ? undefined : u?.title;
               if (!href) return null;
               return (
                 <li key={i} className="text-sm">
@@ -457,7 +410,7 @@ export default function DrinkDetail({
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    <span>{title || href}</span>
+                    <span>{linkTitle || href}</span>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-3.5 h-3.5 opacity-70">
                       <path d="M12.5 2A1.5 1.5 0 0 1 14 3.5V6a1 1 0 1 1-2 0V5.414L8.707 8.707a1 1 0 0 1-1.414-1.414L10.586 4H9a1 1 0 1 1 0-2h3.5z"/>
                       <path d="M6 4a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2v-3a1 1 0 1 0-2 0v3H6V6h3a1 1 0 1 0 0-2H6z"/>
@@ -470,15 +423,14 @@ export default function DrinkDetail({
         </Section>
       )}
 
-      {(frontmatter?.contributor || frontmatter?.updated_at) && (
+      {/* Contributor & date */}
+      {(frontmatter?.contributor || (frontmatter?.updated_at && typeof frontmatter.updated_at === "string")) && (
         <div className="text-xs text-neutral-500">
           {frontmatter.contributor ? (
-            <span className="mr-3">{t("contributor")}: {toDisplay(frontmatter.contributor)}</span>
+            <span className="mr-3">{t("contributor")}: {String(frontmatter.contributor)}</span>
           ) : null}
-          {frontmatter.updated_at ? (
-            <span>
-              {t("updatedAt")}: {toDisplay(frontmatter.updated_at)}
-            </span>
+          {frontmatter.updated_at && typeof frontmatter.updated_at === "string" ? (
+            <span>{t("updatedAt")}: {frontmatter.updated_at}</span>
           ) : null}
         </div>
       )}

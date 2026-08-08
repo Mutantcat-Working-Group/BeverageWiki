@@ -1,11 +1,8 @@
 import { readDrink, listDrinks } from "@/lib/drinks";
-import { pickLocale } from "@/lib/i18n";
-import { Metadata } from "next";
 import { remark } from "remark";
 import html from "remark-html";
 import Header from "@/components/Header";
 import DrinkDetail from "./Detail.client";
-import GiscusComments from "@/components/GiscusComments";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -14,11 +11,10 @@ export async function generateStaticParams() {
   return drinks.map((d) => ({ slug: d.slug }));
 }
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+export async function generateMetadata({ params }: Props) {
   const { slug } = await params;
   const data = await readDrink(slug);
-  const titleLS = data?.frontmatter.title as any;
-  const title = pickLocale(titleLS, "zh") || pickLocale(titleLS, "en") || slug;
+  const title = data?.locales[data.defaultLocale]?.frontmatter.title || slug;
   return { title };
 }
 
@@ -27,19 +23,25 @@ export default async function DrinkPage({ params }: Props) {
   const data = await readDrink(slug);
   if (!data) return <div className="p-6">Not found</div>;
 
-  const title = pickLocale((data.frontmatter.title as any) || {}, "zh") ||
-    pickLocale((data.frontmatter.title as any) || {}, "en") || slug;
+  // Render markdown for each locale
+  const renderedLocales: Record<string, { frontmatter: any; contentHtml: string }> = {};
 
-  // For demo: render the body markdown to HTML
-  const processed = await remark().use(html).process(data.content || "");
-  const contentHtml = processed.toString();
+  for (const [locale, { frontmatter, content }] of Object.entries(data.locales)) {
+    const processed = await remark().use(html).process(content || "");
+    renderedLocales[locale] = {
+      frontmatter,
+      contentHtml: processed.toString(),
+    };
+  }
 
   return (
     <div className="min-h-screen bg-background text-foreground p-4 sm:p-12">
       <Header title={"BeverageWiki"} />
       <div className="max-w-3xl mx-auto px-0 sm:px-2">
-        <DrinkDetail frontmatter={data.frontmatter as any} contentHtml={contentHtml} />
-        <GiscusComments />
+        <DrinkDetail
+          locales={renderedLocales}
+          defaultLocale={data.defaultLocale}
+        />
       </div>
     </div>
   );
