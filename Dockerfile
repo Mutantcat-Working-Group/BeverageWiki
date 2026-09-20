@@ -9,7 +9,7 @@ ARG NEXT_PUBLIC_GISCUS_CATEGORY_ID
 WORKDIR /app
 
 COPY package.json package-lock.json ./
-RUN npm ci
+RUN rm -f package-lock.json && npm install
 
 COPY . .
 
