@@ -1,3 +1,6 @@
+// BeverageWiki — 由异猫工作群（mutantcat.org）发行
+// GitHub: https://github.com/Mutantcat-Working-Group
+
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
@@ -95,6 +98,7 @@ export default function RootLayout({
             >
               Github
             </a>
+            <span className="block mt-1">由异猫工作群（mutantcat.org）发行</span>
           </div>
         </footer>
       </body>
